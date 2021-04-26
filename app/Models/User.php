@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use App\Models\UserProfile;
+use App\Models\Course;
 
 class User extends \TCG\Voyager\Models\User
 {
@@ -21,11 +22,18 @@ class User extends \TCG\Voyager\Models\User
         'name',
         'email',
         'password',
+        'is_teacher',
+        'saved_course'
     ];
 
     public function profile()
     {
         return $this->hasOne(UserProfile::class);
+    }
+
+    public function courses()
+    {
+        return $this->hasMany(Course::class);
     }
 
     /**
@@ -44,6 +52,7 @@ class User extends \TCG\Voyager\Models\User
      * @var array
      */
     protected $casts = [
+        'saved_course' => 'array',
         'email_verified_at' => 'datetime',
     ];
 }
