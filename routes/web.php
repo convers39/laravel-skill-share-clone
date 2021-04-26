@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\UserProfileController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -25,3 +25,8 @@ Route::group(['prefix' => 'admin'], function () {
 Auth::routes();
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+// user account
+Route::get('/account', [UserProfileController::class, 'index'])->name('account');
+Route::get('/account/{name}', [UserProfileController::class, 'show'])->name('account.show');
+Route::post('/account/{name}', [UserProfileController::class, 'update'])->name('account.update');
