@@ -16,6 +16,7 @@ class Course extends Model
     //         $course->slug = Str::slug($course->title);
     //     });
     // }
+
     use HasFactory;
     protected $fillable = [
         'title',
@@ -26,6 +27,11 @@ class Course extends Model
         'video_count',
         'save_count',
     ];
+
+    public function getSlugAttribute()
+    {
+        return Str::slug($this->title);
+    }
 
     public function teacher()
     {
