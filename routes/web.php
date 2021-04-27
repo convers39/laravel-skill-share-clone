@@ -26,6 +26,9 @@ Auth::routes();
 
 Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+// course list and detail
+Route::get('/course', [App\Http\Controllers\CourseController::class, 'index'])->name('course');
+Route::get('/course/{slug}', [App\Http\Controllers\CourseController::class, 'show'])->name('course.show');
 // user account
 Route::get('/account', [UserProfileController::class, 'index'])->name('account');
 Route::get('/account/{name}', [UserProfileController::class, 'show'])->name('account.show');

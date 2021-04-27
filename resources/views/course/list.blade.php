@@ -14,12 +14,7 @@
               </div>
             @endif
 
-            @auth
-              {{ __('You are logged in!') }}
-            @endauth
-            @guest
-              {{ __('You are logged out!') }}
-            @endguest
+            <h2>This is list page</h2>
           </div>
         </div>
       </div>
