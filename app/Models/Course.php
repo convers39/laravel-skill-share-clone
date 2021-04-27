@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use App\Models\User;
 
 class Course extends Model
 {
@@ -33,7 +34,7 @@ class Course extends Model
         return Str::slug($this->title);
     }
 
-    public function teacher()
+    public function user()
     {
         return $this->belongsTo(User::class);
     }

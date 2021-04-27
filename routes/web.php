@@ -29,6 +29,7 @@ Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('ho
 // course list and detail
 Route::get('/courses', [App\Http\Controllers\CourseController::class, 'index'])->name('course');
 Route::get('/courses/{course}/{slug}', [App\Http\Controllers\CourseController::class, 'show'])->name('course.show');
+
 // user account
 Route::get('/accounts', [UserProfileController::class, 'index'])->name('account');
 Route::get('/accounts/{name}', [UserProfileController::class, 'show'])->name('account.show');

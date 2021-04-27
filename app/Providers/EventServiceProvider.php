@@ -8,6 +8,8 @@ use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvi
 use Illuminate\Support\Facades\Event;
 
 use App\Models\Course;
+use App\Models\User;
+use App\Models\UserProfile;
 use App\Observers\CourseObserver;
 
 class EventServiceProvider extends ServiceProvider
@@ -30,6 +32,9 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        User::created(function ($user) {
+            $user->profile()->save(new UserProfile());
+        });
         Course::observe(CourseObserver::class);
     }
 }
