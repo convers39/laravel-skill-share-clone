@@ -8,10 +8,14 @@
     <div class="row align-items-center my-4">
       <div class="col-lg-8">
         <div class="embed-responsive embed-responsive-16by9">
-          <iframe class="embed-responsive-item" width="560" height="315" src="https://www.youtube.com/embed/AbCTlemwZ1k"
+          <video id="{{ __('video') }}" class="embed-responsive-item" controls preload="auto"
+            poster="{{ asset('media/thumbnail/bunny.jpeg') }}">
+            <source src="{{ asset('media/video/test.mp4') }}" type="video/mp4">
+          </video>
+          {{-- <iframe class="embed-responsive-item" width="560" height="315" src="https://www.youtube.com/embed/AbCTlemwZ1k"
             title="YouTube video player" frameborder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen></iframe>
+            allowfullscreen></iframe> --}}
         </div>
         {{-- <img class="img-fluid rounded mb-4 mb-lg-0" src="http://placehold.it/900x400" alt=""> --}}
       </div>
@@ -103,8 +107,8 @@
           <div class="profile-sidebar">
             <!-- SIDEBAR USERPIC -->
             <div class="profile-userpic my-2">
-              <img width="100" height="100" src="{{ url('/img/avatar.jpg') }}" class="img-responsive rounded-circle"
-                alt="Avatar">
+              <img width="100" height="100" src="{{ asset('media/img/avatar.jpg') }}"
+                class="img-responsive rounded-circle" alt="Avatar">
             </div>
             <!-- END SIDEBAR USERPIC -->
             <!-- SIDEBAR USER TITLE -->

@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use App\Models\User;
+use App\Models\Video;
+
 
 class Course extends Model
 {
@@ -37,5 +39,10 @@ class Course extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function videos()
+    {
+        return $this->hasMany(Video::class);
     }
 }
