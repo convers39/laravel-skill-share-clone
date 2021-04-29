@@ -50,7 +50,7 @@
               <div class="form-group mb-4 row">
                 <label class="col-form-label col-sm-3" for="city">City</label>
                 <div class="col-sm-9">
-                  <input type="text" id="nickname" name="nickname" class="form-control"
+                  <input type="text" id="city" name="city" class="form-control"
                     value="{{ $profile->city ?? 'I live in...' }}" />
                 </div>
               </div>

@@ -23,7 +23,7 @@
     </h6>
     <ul class="nav nav-tabs flex-column mb-2 text-left" id="sidebar-tablist" role="tablist">
       <li class="nav-item py-2" role="presentation">
-        <a class="nav-link active" href="#video-lesson" id="video-lesson-tab" data-toggle="tab">
+        <a class="nav-link rounded active" href="#video-lesson" id="video-lesson-tab" data-toggle="tab">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-play-btn"
             viewBox="0 0 16 16">
             <path d="M6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814l-3.5-2.5z" />
@@ -33,8 +33,8 @@
           Video Lessons
         </a>
       </li>
-      <li class="nav-item py-2" role="presentation">
-        <a class="nav-link " href="#course-info" id="course-info-tab" data-toggle="tab">
+      <li class="nav-item py-2 " role="presentation">
+        <a class="nav-link rounded " href="#course-info" id="course-info-tab" data-toggle="tab">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-square"
             viewBox="0 0 16 16">
             <path

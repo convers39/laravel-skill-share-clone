@@ -15,9 +15,9 @@
 
     </div>
     <div class="row justify-content-center">
-      <div class="col-md-10 mb-4 card-columns">
+      <div class="col-md-10 mb-4">
         @forelse ($courses as $course)
-          @include('components.course-card')
+          @include('components.course-card-teaching')
           {{-- TODO: figure out how to handle component without same name with model --}}
           {{-- <x-course-card :course="$course" /> --}}
         @empty

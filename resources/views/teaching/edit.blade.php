@@ -1,36 +1,35 @@
 @extends('layouts.app')
-
+<!-- Styles -->
+<link href="{{ asset('css/ckeditor.css') }}" rel="stylesheet">
 @section('content')
 
   <!-- Page Content -->
-  <div class="container row mx-auto justify-content-center">
-
-    <div class="row justify-content-between col-md-12 mt-3 mb-5 py-2">
-      <div class="px-4">
-
-        <h2>{{ $course->title }}</h2>
-        @if (!$course->is_published)
-          <small>This course is saved as draft.</small>
-        @endif
+  <div class="container row justify-content-center">
+    <div class="col-md-12 my-4 py-2">
+      <div class="row justify-content-between px-4">
+        <div class="px-2">
+          <h2>{{ $course->title }}</h2>
+          @if (!$course->is_published)
+            <small>This course is saved as draft.</small>
+          @endif
+        </div>
+        <div class="px-4">
+          <button type="submit" class="btn btn-outline-success mx-1">Save Draft</button>
+          <button type="submit" class="btn btn-success mx-1">Publish</button>
+        </div>
       </div>
-      <div class="px-4">
-        <button type="submit" class="btn btn-outline-success mx-1">Save Draft</button>
-        <button type="submit" class="btn btn-success mx-1">Publish</button>
-      </div>
-
-
     </div>
     <div class="row col-md-12 my-3">
       @include('layouts.sidebar')
-      <div class="col-md-8 col-lg-9 tab-content min-vh-100" id="course-tab-content">
+      <div class="col-md-8 col-lg-9 tab-content flex-fill h-100" id="course-tab-content">
         {{-- TODO: make a component for video upload fieldset --}}
-        <div class="p-3 tab-pane fade show active" id="video-lesson" role="tabpanel" aria-labelledby="video-lesson-tab">
+        <div class="px-3 tab-pane fade show active" id="video-lesson" role="tabpanel" aria-labelledby="video-lesson-tab">
           <h3 class="text-primary mb-2 ml-2">Video Lessons</h3>
           <hr>
-          <div class="jumbotron">
+          <div class="jumbotron mb-0">
             <div>
               <h5>Videos Uploaded</h5>
-              <fieldset class="my-3">
+              <fieldset class="my-3 h-50 border border-secondary rounded shadow-sm p-2">
                 <ul class="list-unstyled">
                   @for ($i = 0; $i < 2; $i++)
 
@@ -42,7 +41,7 @@
             <hr>
             <div>
               <h5>New Video</h5>
-              <form class="px-4 row justify-content-between align-items-center" action="">
+              <form class="px-3 row justify-content-between align-items-center" action="">
                 <div class="form-group">
                   <label for="video-upload">
                   </label>
@@ -56,11 +55,10 @@
             </div>
           </div>
         </div>
-        <div class="p-3 tab-pane fade" id="course-info" role="tabpanel" aria-labelledby="course-info-tab">
-
-          <h3 class="text-primary mb-2 ml-2">Class Overview</h3>
+        <div class="px-3 tab-pane fade" id="course-info" role="tabpanel" aria-labelledby="course-info-tab">
+          <h3 class="text-primary mb-2 ml-2">Course Overview</h3>
           <hr>
-          <div class="jumbotron">
+          <div class="jumbotron mb-0">
             <form method="post" action="" enctype="multipart/form-data">
               @csrf
               <div class="form-group">
