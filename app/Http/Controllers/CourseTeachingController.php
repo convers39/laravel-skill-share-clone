@@ -12,23 +12,34 @@ class CourseTeachingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $user = $request->user();
+        $courses = $user->courses()->with(['user'])->paginate(5);
+        return view('teaching.index', ['courses' => $courses, 'user' => $user]);
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Create a course instance and redirect to the edit page.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        return view('teaching.create');
+        // validate request
+
+        // create a new empty instance
+        $user = $request->user();
+        $course = $user->courses()->create([
+            'title' => 'My New Course',
+            'desc' => 'Course description',
+        ]);
+
+        return redirect()->route('teaching.edit', ['course' => $course]);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Will not be used.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -39,7 +50,8 @@ class CourseTeachingController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the preview of an unpublished course, 
+     * or redirect to the published course page.
      *
      * @param  \App\Models\Course  $course
      * @return \Illuminate\Http\Response
@@ -57,7 +69,7 @@ class CourseTeachingController extends Controller
      */
     public function edit(Course $course)
     {
-        //
+        return view('teaching.edit', ['course' => $course]);
     }
 
     /**
@@ -69,7 +81,13 @@ class CourseTeachingController extends Controller
      */
     public function update(Request $request, Course $course)
     {
-        //
+        //validate the request
+        $request->validate([
+            'title' => 'required',
+            'desc' => 'required'
+        ]);
+        $course->update($request->all());
+        return back()->with('success', 'Course updated successfully');
     }
 
     /**
@@ -80,6 +98,7 @@ class CourseTeachingController extends Controller
      */
     public function destroy(Course $course)
     {
-        //
+        $course->delete();
+        return back()->with('success', 'Course deleted successfully');
     }
 }

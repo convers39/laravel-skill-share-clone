@@ -21,9 +21,9 @@
         </svg> --}}
       </a>
     </h6>
-    <ul class="nav flex-column mb-2 text-left">
-      <li class="nav-item py-2">
-        <a class="nav-link btn btn-primary" href="#">
+    <ul class="nav nav-tabs flex-column mb-2 text-left" id="sidebar-tablist" role="tablist">
+      <li class="nav-item py-2" role="presentation">
+        <a class="nav-link active" href="#video-lesson" id="video-lesson-tab" data-toggle="tab">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-play-btn"
             viewBox="0 0 16 16">
             <path d="M6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814l-3.5-2.5z" />
@@ -33,8 +33,8 @@
           Video Lessons
         </a>
       </li>
-      <li class="nav-item py-2">
-        <a class="nav-link btn btn-primary" href="#">
+      <li class="nav-item py-2" role="presentation">
+        <a class="nav-link " href="#course-info" id="course-info-tab" data-toggle="tab">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-info-square"
             viewBox="0 0 16 16">
             <path
@@ -42,7 +42,7 @@
             <path
               d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
           </svg>
-          Class Info
+          Course Info
         </a>
       </li>
     </ul>

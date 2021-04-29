@@ -13,8 +13,13 @@
       <li class="nav-item  {{ Route::is('course') ? 'active' : '' }}">
         <a class="nav-link" href="{{ url('/courses') }}">Courses</a>
       </li>
-      <li class="nav-item {{ Route::is('teaching*') ? 'active' : '' }} ">
-        <a class="nav-link" href="#">Teaching</a>
+      <li class="nav-item {{ Route::is('teaching*') ? 'active' : '' }} dropdown">
+        <a class="nav-link dropdown-toggle" id="teaching-dropdown" href="#" role="button" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">Teaching</a>
+        <div class="dropdown-menu" aria-labelledby="teaching-dropdown">
+          <a href="{{ route('teaching.create') }}" class="dropdown-item">New Course</a>
+          <a href="{{ route('teaching.index') }}" class="dropdown-item">All My Courses</a>
+        </div>
       </li>
     </ul>
     <form class="form-inline my-2 my-lg-0">
@@ -49,7 +54,7 @@
             </a>
             <a class="dropdown-item" href="{{ route('logout') }}"
               onclick="event.preventDefault();
-                                                                                                               document.getElementById('logout-form').submit();">
+                                                                                                                       document.getElementById('logout-form').submit();">
               {{ __('Logout') }}
             </a>
 

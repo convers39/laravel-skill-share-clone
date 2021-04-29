@@ -41,7 +41,8 @@ Route::get('/courses/{course}/{slug}', [CourseController::class, 'show'])->name(
 Route::resource(
     'teaching',
     CourseTeachingController::class,
-)->parameters(['teaching' => 'course'])->middleware(['auth']);
+)->except(['store'])->parameters(['teaching' => 'course'])->middleware(['auth']);
+
 // equivalent to below
 // Route::get('/teaching', [CourseTeachingController::class, 'index'])->name('teaching');
 // Route::get('/teaching/create', [CourseTeachingController::class, 'create'])->name('teaching.create');
