@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Course;
+use App\Models\TempFile;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+
 
 class CourseTeachingController extends Controller
 {
@@ -82,11 +85,27 @@ class CourseTeachingController extends Controller
     public function update(Request $request, Course $course)
     {
         //validate the request
+        dd($request->all());
+        // $user = $request->user();
         $request->validate([
             'title' => 'required',
             'desc' => 'required'
         ]);
         $course->update($request->all());
+        $temp_file = TempFile::where('folder', $request->cover)->first();
+        dd($request->all(), $temp_file);
+
+        if ($temp_file) {
+            $filepath = "app/public/covers/tmp/{$temp_file->folder}/{$temp_file->filename}";
+            // $course->addMedia(storage_path("app/public/covers/tmp/{$temp_file->folder}/{$temp_file->filename}"))
+            //     ->toMediaCollection('covers');
+            Storage::move($filepath, "public/media/covers/");
+            $course->url = "public/media/covers/{$temp_file->filename}";
+            $course->save();
+
+            rmdir(storage_path("app/public/covers/tmp/{$temp_file->folder}/"));
+            $temp_file->delete();
+        }
         return back()->with('success', 'Course updated successfully');
     }
 
@@ -96,7 +115,7 @@ class CourseTeachingController extends Controller
      * @param  \App\Models\Course  $course
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Course $course)
+    public function destroy(Request $request, Course $course)
     {
         $course->delete();
         return back()->with('success', 'Course deleted successfully');

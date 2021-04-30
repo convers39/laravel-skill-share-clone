@@ -1,6 +1,6 @@
 {{-- Sidebar in course edit page --}}
 
-<nav id="sidebarMenu" class="min-vh-100 col-md-4 col-lg-3 d-md-block bg-light sidebar collapse">
+<nav id="sidebarMenu" class="col-md-4 col-lg-3 d-md-block bg-light sidebar mh-100 collapse">
   <div class="sidebar-sticky pt-3">
     <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-4 text-muted">
       <span>Edit Course</span>

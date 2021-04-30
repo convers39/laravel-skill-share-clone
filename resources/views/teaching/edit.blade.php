@@ -1,6 +1,8 @@
 @extends('layouts.app')
 <!-- Styles -->
 <link href="{{ asset('css/ckeditor.css') }}" rel="stylesheet">
+<link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet" />
+<link href="{{ asset('css/filepond.css') }}" rel="stylesheet">
 @section('content')
 
   <!-- Page Content -->
@@ -19,40 +21,41 @@
         </div>
       </div>
     </div>
-    <div class="row col-md-12 my-3">
+    <div class="row col-md-12 my-3 h-100">
       @include('layouts.sidebar')
-      <div class="col-md-8 col-lg-9 tab-content flex-fill h-100" id="course-tab-content">
+      <div class="col-md-8 col-lg-9 tab-content flex-fill " id="course-tab-content">
         {{-- TODO: make a component for video upload fieldset --}}
         <div class="px-3 tab-pane fade show active" id="video-lesson" role="tabpanel" aria-labelledby="video-lesson-tab">
           <h3 class="text-primary mb-2 ml-2">Video Lessons</h3>
           <hr>
           <div class="jumbotron mb-0">
-            <div>
-              <h5>Videos Uploaded</h5>
-              <fieldset class="my-3 h-50 border border-secondary rounded shadow-sm p-2">
-                <ul class="list-unstyled">
-                  @for ($i = 0; $i < 2; $i++)
 
+            <div class="">
+              <h5>Videos Uploaded</h5>
+              <div class="my-3 h-50 overflow-auto border border-secondary rounded shadow-sm p-2">
+                <ul class="list-unstyled ">
+                  @for ($i = 0; $i < 2; $i++)
                     @include('components.video-card')
                   @endfor
                 </ul>
-              </fieldset>
+              </div>
             </div>
             <hr>
-            <div>
-              <h5>New Video</h5>
-              <form class="px-3 row justify-content-between align-items-center" action="">
+            <div class="my-2">
+              <label for="video-upload">
+                <h5>New Video</h5>
+              </label>
+              <input type="file" class="filepond" id="video-upload" name="video-upload" multiple>
+            </div>
+            {{-- <form class="px-3 row justify-content-between align-items-center" action="">
                 <div class="form-group">
-                  <label for="video-upload">
-                  </label>
                   <input type="file" class="form-control-file" id="video-upload" aria-describedby="fileHelp">
-                  <small id="fileHelp" class="form-text text-muted">Upload a video file.</small>
+                  <small class="form-text text-muted">Upload a video file.</small>
                 </div>
                 <div>
                   <button type="submit" class="btn btn-primary">Upload</button>
                 </div>
-              </form>
-            </div>
+              </form> --}}
           </div>
         </div>
         <div class="px-3 tab-pane fade" id="course-info" role="tabpanel" aria-labelledby="course-info-tab">
@@ -75,17 +78,13 @@
                 {{-- <textarea class="ckeditor form-control" name="ckeditor"></textarea> --}}
               </div>
               <div class="form-group">
-                <label for="course-cover">
+                <label for="cover-upload">
                   <h5>Cover Image</h5>
                 </label>
-                <input type="file" class="form-control-file" id="course-cover" aria-describedby="fileHelp">
-                <small id="fileHelp" class="form-text text-muted">This image will be dispalyed as your course
-                  poster.</small>
-
+                <input type="file" class="filepond" id="cover-upload" name="cover" aria-describedby="fileHelp">
+                {{-- <small class="form-text text-muted">This image will be dispalyed as your course
+                  poster.</small> --}}
               </div>
-              {{-- <div class="text-right">
-                <button type="submit" class="btn btn-primary">Submit</button>
-              </div> --}}
             </form>
           </div>
         </div>
@@ -105,6 +104,39 @@
       .catch(error => {
         console.error(error);
       });
+    const videoUploadInput = document.getElementById('video-upload');
+    const coverUploadInput = document.getElementById('cover-upload');
+    const vidoePond = FilePond.create(videoUploadInput);
+    const coverPond = FilePond.create(coverUploadInput);
+    FilePond.setOptions({
+      server: {
+        process: {
+          url: '/teaching/{{ $course->id }}/upload',
+          method: 'POST',
+          headers: {
+            'X-CSRF-Token': '{{ csrf_token() }}'
+          }
+        },
+        revert: async (folder, load, error) => {
+          console.log(folder);
+          // Should remove the earlier created temp file here
+          const res = await fetch('/teaching/{{ $course->id }}/revert', {
+            method: 'DELETE',
+            headers: {
+              'X-CSRF-Token': '{{ csrf_token() }}'
+            },
+            body: folder,
+          });
+          console.log(await res.json());
+          // Can call the error method if something is wrong, should exit after
+          error('oh my goodness');
+
+          // Should call the load method when done, no parameters required
+          load();
+        }
+      }
+
+    });
 
   </script>
   {{-- @endsection --}}
