@@ -10,8 +10,8 @@ class UploadController extends Controller
     public function store(Request $request)
     {
         // $user = $request->user();
-        if ($request->hasFile('cover')) {
-            $file = $request->file('cover');
+        if ($request->hasFile('coverFile')) {
+            $file = $request->file('coverFile');
             $filename = $file->getClientOriginalName();
             $folder = uniqid() . '-' . now()->timestamp;
             // $extension = $file->getClientOriginalExtension();
@@ -32,7 +32,9 @@ class UploadController extends Controller
         $folder = json_decode($request->getContent(), TRUE)['folder'];
         deleteDirectory(storage_path("app/public/covers/tmp/{$folder}/"));
         $temp_file = TempFile::where('folder', $folder)->first();
-        $temp_file->delete();
+        if ($temp_file) {
+            $temp_file->delete();
+        }
         return response()->json(['msg' => 'File removed successfully']);
         // return back()->with('success', 'File deleted successfully.');
     }

@@ -85,24 +85,36 @@ class CourseTeachingController extends Controller
     public function update(Request $request, Course $course)
     {
         //validate the request
-        dd($request->all());
-        // $user = $request->user();
+        // dd($request->all(), $course);
         $request->validate([
             'title' => 'required',
             'desc' => 'required'
         ]);
-        $course->update($request->all());
-        $temp_file = TempFile::where('folder', $request->cover)->first();
-        dd($request->all(), $temp_file);
+        // $course->update($request->all());
+        $form_data = $request->all();
+        $desc = strip_tags($form_data['desc']);
+        $course->update([
+            'title' => $form_data['title'],
+            'desc' => $desc
+        ]);
+
+        $cover_folder = json_decode($form_data['coverFile'], TRUE)['folder'];
+        $temp_file = TempFile::where('folder', $cover_folder)->first();
 
         if ($temp_file) {
-            $filepath = "app/public/covers/tmp/{$temp_file->folder}/{$temp_file->filename}";
-            // $course->addMedia(storage_path("app/public/covers/tmp/{$temp_file->folder}/{$temp_file->filename}"))
-            //     ->toMediaCollection('covers');
-            Storage::move($filepath, "public/media/covers/");
-            $course->url = "public/media/covers/{$temp_file->filename}";
+            // retrieve file path and target path
+            $filepath = "covers/tmp/{$temp_file->folder}/{$temp_file->filename}";
+            $target_path = "covers/{$course->id}/{$temp_file->filename}";
+            // check if current course already has a file
+            if ($course->cover_img && Storage::exists($course->cover_img)) {
+                Storage::delete($course->cover_img);
+            }
+            // move temp file to target folder, Storage will attach prefix in disk setting
+            Storage::move($filepath, $target_path);
+            // save to course img url prop
+            $course->cover_img = "{$target_path}";
             $course->save();
-
+            // remove temp directory and temp file record
             rmdir(storage_path("app/public/covers/tmp/{$temp_file->folder}/"));
             $temp_file->delete();
         }
