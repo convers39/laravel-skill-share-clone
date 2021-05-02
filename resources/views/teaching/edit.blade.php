@@ -1,8 +1,29 @@
 @extends('layouts.app')
-<!-- Styles -->
-<link href="{{ asset('css/ckeditor.css') }}" rel="stylesheet">
-<link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet" />
-<link href="{{ asset('css/filepond.css') }}" rel="stylesheet">
+
+@push('stylesheets')
+  <link href="{{ asset('ckeditor/ckeditor.css') }}" rel="stylesheet">
+  <link href="{{ asset('filepond/filepond.css') }}" rel="stylesheet">
+  <link href="{{ asset('filepond/filepond-media-preview.css') }}" rel="stylesheet">
+  <link href="{{ asset('filepond/filepond-image-preview.css') }}" rel="stylesheet">
+  {{-- <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet" /> --}}
+  {{-- <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet"> --}}
+
+@endpush
+
+@push('scripts')
+  <script src="{{ asset('ckeditor/ckeditor.js') }}"></script>
+  <script src="{{ asset('filepond/filepond.js') }}"></script>
+  <script src="{{ asset('filepond/filepond-media-preview.js') }}"></script>
+  <script src="{{ asset('filepond/filepond-image-preview.js') }}"></script>
+  <script src="{{ asset('filepond/filepond-file-validate-type.js') }}"></script>
+  {{-- <script src="https://unpkg.com/filepond/dist/filepond.js"></script> --}}
+  {{-- <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script> --}}
+  {{-- <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script> --}}
+  {{-- <script
+    src="https://cdn.jsdelivr.net/npm/filepond-plugin-media-preview@1.0.7/dist/filepond-plugin-media-preview.min.js">
+  </script> --}}
+@endpush
+
 @section('content')
 
   <!-- Page Content -->
@@ -101,8 +122,7 @@
 
   <!-- /.container -->
 @endsection
-@section('script')
-  <script src="{{ asset('ckeditor/ckeditor.js') }}"></script>
+@section('scripts')
   <script type="text/javascript">
     ClassicEditor
       .create(document.querySelector('#course-description'))
@@ -111,7 +131,5 @@
       });
 
   </script>
-  <script src="{{ asset('js/filepondUpload.js') }}">
-
-  </script>
+  <script src="{{ asset('js/filepondUpload.js') }}"> </script>
 @endsection

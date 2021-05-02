@@ -1,4 +1,6 @@
 // filepond
+// import FilePondPluginMediaPreview from 'filepond-plugin-media-preview';
+
 const requestHeader = {
   "X-CSRF-Token": document
     .getElementsByTagName("meta")
@@ -7,10 +9,15 @@ const requestHeader = {
 const courseId = document.getElementById("course-id").value;
 const uploadUrl = `/teaching/${courseId}/upload`;
 const revertUrl = `/teaching/${courseId}/revert`;
+
+FilePond.registerPlugin(FilePondPluginFileValidateType, FilePondPluginMediaPreview, FilePondPluginImagePreview);
+
 const videoUploadInput = document.getElementById("video-upload");
 const coverUploadInput = document.getElementById("cover-upload");
-const videoPond = FilePond.create(videoUploadInput);
-const coverPond = FilePond.create(coverUploadInput);
+const videoPond = FilePond.create(videoUploadInput, { acceptedFileTypes: ['video/mpeg', 'video/mp4', 'video/ogg'] });
+const coverPond = FilePond.create(coverUploadInput, { acceptedFileTypes: ['image/*'] });
+
+// videoPond.labelIdle = 'ドラッグまたは <span class="filepond--label-action"> ブラウズ </span>';
 
 // TODO: error handling
 coverPond.setOptions({

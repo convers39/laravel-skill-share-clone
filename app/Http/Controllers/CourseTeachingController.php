@@ -84,6 +84,7 @@ class CourseTeachingController extends Controller
      */
     public function update(Request $request, Course $course)
     {
+        //TODO: save video instance to database
         //validate the request
         dd($request->all());
         $request->validate([

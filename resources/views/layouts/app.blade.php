@@ -12,7 +12,8 @@
 
   <!-- Scripts -->
   <script src="{{ asset('js/app.js') }}" defer></script>
-  <script src="https://unpkg.com/filepond/dist/filepond.js"></script>
+  {{-- <script src="https://unpkg.com/filepond/dist/filepond.js"></script> --}}
+  @stack('scripts')
 
   <!-- Fonts -->
   <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -20,6 +21,7 @@
 
   <!-- Styles -->
   <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet">
+  @stack('stylesheets')
   {{-- <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet" /> --}}
 </head>
 
@@ -31,7 +33,7 @@
       @yield('content')
     </main>
   </div>
-  @yield('script')
+  @yield('scripts')
 </body>
 
 </html>
