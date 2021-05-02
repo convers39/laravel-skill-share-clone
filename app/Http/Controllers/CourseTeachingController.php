@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Course;
+use App\Models\Video;
 use App\Models\TempFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -84,37 +85,64 @@ class CourseTeachingController extends Controller
      */
     public function update(Request $request, Course $course)
     {
-        //TODO: save video instance to database
+        // dd($request->all());
         //validate the request
-        dd($request->all());
         $request->validate([
             'title' => 'required',
             'desc' => 'required'
         ]);
-        // $course->update($request->all());
+
         $form_data = $request->all();
-        $desc = strip_tags($form_data['desc']);
+        $desc = $form_data['desc'];
         $course->update([
             'title' => $form_data['title'],
             'desc' => $desc
         ]);
 
-        // check if form includes cover or video file uploaded
-        $cover_folder = json_decode($form_data['coverFile'], TRUE)['folder'];
+        // check video file list
+        $video_files = isset($form_data['videoFileList'])
+            ? array_filter(explode(',', $form_data['videoFileList']))
+            : [];
+        if (!empty($video_files)) {
+            foreach ($video_files as $folder) {
+                $temp_file = TempFile::where('folder', $folder)->first();
+                if ($temp_file) {
+                    // retrieve file path and target path
+                    $filepath = "{$temp_file->prefix}/tmp/{$temp_file->folder}/{$temp_file->filename}";
+                    $target_path = "{$temp_file->prefix}/{$course->id}/{$temp_file->filename}";
+                    // move temp file to target folder, Storage will attach prefix in disk setting
+                    Storage::move($filepath, $target_path);
+                    // save video instance
+                    Video::create([
+                        'course_id' => $course->id,
+                        'title' => $temp_file->filename,
+                        'url' => $target_path
+                    ]);
+                    // remove temp directory and temp file record
+                    rmdir(storage_path("app/public/{$temp_file->prefix}/tmp/{$temp_file->folder}/"));
+                    $temp_file->delete();
+                }
+            }
+        }
+
+        // check if form includes cover file
+        $cover_folder = isset($form_data['coverFile'])
+            ? json_decode($form_data['coverFile'], TRUE)['folder']
+            : null;
         $temp_file = TempFile::where('folder', $cover_folder)->first();
 
         if ($temp_file) {
             // retrieve file path and target path
             $filepath = "{$temp_file->prefix}/tmp/{$temp_file->folder}/{$temp_file->filename}";
             $target_path = "{$temp_file->prefix}/{$course->id}/{$temp_file->filename}";
-            // check if current course already has a file
+            // check if current course already has a cover image
             if ($course->cover_img && Storage::exists($course->cover_img)) {
                 Storage::delete($course->cover_img);
             }
             // move temp file to target folder, Storage will attach prefix in disk setting
             Storage::move($filepath, $target_path);
             // save to course img url prop
-            $course->cover_img = "{$target_path}";
+            $course->cover_img = $target_path;
             $course->save();
             // remove temp directory and temp file record
             rmdir(storage_path("app/public/{$temp_file->prefix}/tmp/{$temp_file->folder}/"));

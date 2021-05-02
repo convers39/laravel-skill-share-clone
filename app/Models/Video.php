@@ -14,6 +14,7 @@ class Video extends Model
     // use InteractsWithMedia;
 
     protected $fillable = [
+        'course_id',
         'title',
         'thumbnail',
         'views',

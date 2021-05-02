@@ -7,6 +7,8 @@ const requestHeader = {
   ["csrf-token"].getAttribute("content"),
 };
 const courseId = document.getElementById("course-id").value;
+const videoFileListEl = document.getElementById("video-file-list");
+
 const uploadUrl = `/teaching/${courseId}/upload`;
 const revertUrl = `/teaching/${courseId}/revert`;
 
@@ -20,6 +22,7 @@ const coverPond = FilePond.create(coverUploadInput, { acceptedFileTypes: ['image
 // videoPond.labelIdle = 'ドラッグまたは <span class="filepond--label-action"> ブラウズ </span>';
 
 // TODO: error handling
+// filepond instance for cover image upload
 coverPond.setOptions({
   server: {
     process: {
@@ -44,6 +47,7 @@ coverPond.setOptions({
   },
 });
 
+// filepond instance for video upload, handle multiple files
 videoPond.setOptions({
   maxFiles: 5,
   server: {
@@ -68,6 +72,17 @@ videoPond.setOptions({
     },
   },
 });
-// videoPond.onprocessfile = (error, file) => {
-//   console.log('process file', file);
-// }
+
+// attach video file list to form before submitting, 
+// by default only the first file folder id will be submitted
+const form = document.getElementById('course-form');
+form.onsubmit = () => {
+  const files = videoPond.getFiles();
+  const videoFileList = [];
+  for (const file of files) {
+    let id = JSON.parse(file.serverId)['folder'];
+    videoFileList.push(id);
+  };
+  videoFileListEl.value = videoFileList;
+};
+

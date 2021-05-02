@@ -58,12 +58,12 @@
               <hr>
               <div class="jumbotron mb-0">
                 <div class="">
-                  <h5>Videos Uploaded</h5>
+                  <h5>Videos Uploaded ( <small>{{ $course->videos->count() }} videos</small> )</h5>
                   <div class="my-3 h-50 overflow-auto border border-secondary rounded shadow-sm p-2">
                     <ul class="list-unstyled ">
-                      @for ($i = 0; $i < 2; $i++)
+                      @foreach ($course->videos as $video)
                         @include('components.video-card')
-                      @endfor
+                      @endforeach
                     </ul>
                   </div>
                 </div>
@@ -73,6 +73,7 @@
                     <h5>New Video</h5>
                   </label>
                   <input type="file" class="filepond" id="video-upload" name="videoFile" multiple>
+                  <input type="text" hidden id="video-file-list" name="videoFileList">
                 </div>
                 {{-- <form class="px-3 row justify-content-between align-items-center" action="">
                 <div class="form-group">
