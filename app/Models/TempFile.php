@@ -9,5 +9,5 @@ class TempFile extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['folder', 'filename'];
+    protected $fillable = ['prefix', 'folder', 'filename'];
 }

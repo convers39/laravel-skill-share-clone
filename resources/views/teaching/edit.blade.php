@@ -10,7 +10,8 @@
     <div class="col-md-12 my-4 py-2">
       <div class="row justify-content-between px-4">
         <div class="px-2">
-          <h2>{{ $course->title }}</h2>
+          <h2>{{ $course->title }} </h2>
+          <input hidden id="course-id" value="{{ $course->id }}" />
           @if (!$course->is_published)
             <small>This course is saved as draft.</small>
           @endif
@@ -99,52 +100,18 @@
   </div>
 
   <!-- /.container -->
-
-
-  {{-- @section('script') --}}
+@endsection
+@section('script')
   <script src="{{ asset('ckeditor/ckeditor.js') }}"></script>
-  {{-- <script src="https://cdn.ckeditor.com/ckeditor5/27.1.0/classic/ckeditor.js"></script> --}}
   <script type="text/javascript">
     ClassicEditor
       .create(document.querySelector('#course-description'))
       .catch(error => {
         console.error(error);
       });
-    const videoUploadInput = document.getElementById('video-upload');
-    const coverUploadInput = document.getElementById('cover-upload');
-    const vidoePond = FilePond.create(videoUploadInput);
-    const coverPond = FilePond.create(coverUploadInput);
-    FilePond.setOptions({
-      server: {
-        process: {
-          url: '/teaching/{{ $course->id }}/upload',
-          method: 'POST',
-          headers: {
-            'X-CSRF-Token': '{{ csrf_token() }}'
-          }
-        },
-        revert: async (folder, load, error) => {
-          console.log(folder);
-          // Should remove the earlier created temp file here
-          const res = await fetch('/teaching/{{ $course->id }}/revert', {
-            method: 'DELETE',
-            headers: {
-              'X-CSRF-Token': '{{ csrf_token() }}'
-            },
-            body: folder,
-          });
-          console.log(await res.json());
-          // Can call the error method if something is wrong, should exit after
-          error('oh my goodness');
-
-          // Should call the load method when done, no parameters required
-          load();
-        }
-      }
-
-    });
 
   </script>
-  {{-- @endsection --}}
+  <script src="{{ asset('js/filepondUpload.js') }}">
 
+  </script>
 @endsection

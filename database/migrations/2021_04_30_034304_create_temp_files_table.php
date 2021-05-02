@@ -15,6 +15,7 @@ class CreateTempFilesTable extends Migration
     {
         Schema::create('temp_files', function (Blueprint $table) {
             $table->id();
+            $table->string('prefix');
             $table->string('folder');
             $table->string('filename');
             $table->timestamps();

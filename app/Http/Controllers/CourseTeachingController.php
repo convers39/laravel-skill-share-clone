@@ -85,7 +85,7 @@ class CourseTeachingController extends Controller
     public function update(Request $request, Course $course)
     {
         //validate the request
-        // dd($request->all(), $course);
+        dd($request->all());
         $request->validate([
             'title' => 'required',
             'desc' => 'required'
@@ -98,13 +98,14 @@ class CourseTeachingController extends Controller
             'desc' => $desc
         ]);
 
+        // check if form includes cover or video file uploaded
         $cover_folder = json_decode($form_data['coverFile'], TRUE)['folder'];
         $temp_file = TempFile::where('folder', $cover_folder)->first();
 
         if ($temp_file) {
             // retrieve file path and target path
-            $filepath = "covers/tmp/{$temp_file->folder}/{$temp_file->filename}";
-            $target_path = "covers/{$course->id}/{$temp_file->filename}";
+            $filepath = "{$temp_file->prefix}/tmp/{$temp_file->folder}/{$temp_file->filename}";
+            $target_path = "{$temp_file->prefix}/{$course->id}/{$temp_file->filename}";
             // check if current course already has a file
             if ($course->cover_img && Storage::exists($course->cover_img)) {
                 Storage::delete($course->cover_img);
@@ -115,7 +116,7 @@ class CourseTeachingController extends Controller
             $course->cover_img = "{$target_path}";
             $course->save();
             // remove temp directory and temp file record
-            rmdir(storage_path("app/public/covers/tmp/{$temp_file->folder}/"));
+            rmdir(storage_path("app/public/{$temp_file->prefix}/tmp/{$temp_file->folder}/"));
             $temp_file->delete();
         }
         return back()->with('success', 'Course updated successfully');

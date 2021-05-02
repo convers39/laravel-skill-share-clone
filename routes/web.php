@@ -55,3 +55,6 @@ Route::resource(
 
 Route::post('/teaching/{course}/upload', [UploadController::class, 'store']);
 Route::delete('/teaching/{course}/revert', [UploadController::class, 'destroy']);
+
+// Route::post('/teaching/{course}/upload', [VideoController::class, 'store']);
+// Route::delete('/teaching/{course}/revert', [VideoController::class, 'destroy']);

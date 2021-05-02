@@ -3,7 +3,7 @@
 <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-200 position-relative">
   <div class="col-auto d-none d-lg-block">
     <img class="img-responsive " width="250" height="100%"
-      src="{{ Storage::exists($course->cover_img) ? asset('storage/' . $course->cover_img) : asset($course->cover_img) }}"
+      src="{{ Storage::exists($course->cover_img) ? asset('storage/' . $course->cover_img) : url($course->cover_img) }}"
       alt alt="{{ $course->title }}">
   </div>
   <div class="col p-4 d-flex flex-column position-static">
