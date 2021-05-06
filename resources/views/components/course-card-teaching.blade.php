@@ -2,14 +2,14 @@
 
 <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-200 position-relative">
   <div class="col-auto d-none d-lg-block">
-    <img class="img-responsive " width="250" height="100%"
+    <img class="img-responsive " width="300" height="200px"
       src="{{ Storage::exists($course->cover_img) ? asset('storage/' . $course->cover_img) : url($course->cover_img) }}"
       alt alt="{{ $course->title }}">
   </div>
   <div class="col p-4 d-flex flex-column position-static">
     {{-- <strong class="d-inline-block mb-2 text-primary">{{ $course->title }}</strong> --}}
     <h4 class="d-flex justify-content-between align-items-center mb-1">
-      <span class="text-primary">{{ $course->title }}</span>
+      <span class="text-primary text-truncate">{{ $course->title }}</span>
       @if ($course->is_published)
         <span class="badge badge-success">
           <h6 class="mb-0">Published</h6>
@@ -21,7 +21,7 @@
       @endif
     </h4>
     <small class="mb-1 text-muted">Updated at {{ $course->updated_at }}</small>
-    <p class="card-text mb-auto text-truncate">{{ $course->desc }}</p>
+    <div class="card-text mb-auto text-truncate text-line-clamp-sm">{!! $course->desc !!}</div>
     {{-- <a href="#" class="stretched-link">Continue reading</a> --}}
   </div>
   <div class="btn-group align-items-start py-4 px-3">

@@ -3,19 +3,13 @@
 @section('content')
   <div class="container">
     <div class="row justify-content-center">
-      <div class="col-md-10 mb-4">
-        <div class="card">
-          <div class="card-header">{{ __('My Teaching Courses') }}</div>
-
-          <div class="card-body">
-
-          </div>
-        </div>
-      </div>
 
     </div>
+    <br>
+    <h2>My Teaching Courses</h2>
+    <hr>
     <div class="row justify-content-center">
-      <div class="col-md-10 mb-4">
+      <div class="col-md-12 mb-4">
         @forelse ($courses as $course)
           @include('components.course-card-teaching')
           {{-- TODO: figure out how to handle component without same name with model --}}

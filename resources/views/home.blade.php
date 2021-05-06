@@ -10,7 +10,7 @@
     <hr>
     <div class="row justify-content-center mb-4 ">
       @foreach ($courses as $course)
-        <x-course-card :course="$course" :columns="3" />
+        <x-course-card :course="$course" :columns="4" />
       @endforeach
     </div>
   </div>

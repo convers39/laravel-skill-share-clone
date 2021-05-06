@@ -27,32 +27,32 @@
 @section('content')
 
   <!-- Page Content -->
-  <div class="container row justify-content-center">
-    <div class="col-md-12 my-4 py-2">
-      <div class="row justify-content-between px-4">
-        <div class="px-2">
-          <h2>{{ $course->title }} </h2>
-          <input hidden id="course-id" value="{{ $course->id }}" />
-          @if (!$course->is_published)
-            <small>This course is saved as draft.</small>
-          @endif
-        </div>
-        <div class="px-4">
-          <button type="submit" form="course-form" id="save-draft" class="btn btn-outline-success mx-1">Save
-            Draft</button>
-          <button type="submit" id="publish" class="btn btn-success mx-1">Publish</button>
-        </div>
+  <div class="container row justify-content-center mx-auto">
+    <div class="row justify-content-between col-md-12 my-4 py-2">
+      {{-- <div class="row justify-content-between px-4"> --}}
+      <div class="px-1">
+        <h2>{{ $course->title }} </h2>
+        <input hidden id="course-id" value="{{ $course->id }}" />
+        @if (!$course->is_published)
+          <small>This course is saved as draft.</small>
+        @endif
       </div>
+      <div class="px-1">
+        <button type="submit" form="course-form" id="save-draft" class="btn btn-outline-success mx-1">Save
+          Draft</button>
+        <button type="submit" id="publish" class="btn btn-success mx-1">Publish</button>
+      </div>
+      {{-- </div> --}}
     </div>
     <div class="row col-md-12 my-3 h-100">
       @include('layouts.sidebar')
-      <div class="col-md-8 col-lg-9">
+      <div class="col-md-8 col-lg-9 pr-0">
         <form method="post" id="course-form" action="/teaching/{{ $course->id }}" enctype="multipart/form-data">
           <div class="tab-content flex-fill " id="course-tab-content">
             {{-- TODO: make a component for video upload fieldset --}}
             @method('PUT')
             @csrf
-            <div class="px-3 tab-pane fade show active" id="video-lesson" role="tabpanel"
+            <div class="pl-3 tab-pane fade show active" id="video-lesson" role="tabpanel"
               aria-labelledby="video-lesson-tab">
               <h3 class="text-primary mb-2 ml-2">Video Lessons</h3>
               <hr>
@@ -62,9 +62,11 @@
                       {{ Str::plural('video', $course->videos->count()) }}</small> )</h5>
                   <div class="my-3 h-50 overflow-auto border border-secondary rounded shadow-sm p-2">
                     <ul class="list-unstyled ">
-                      @foreach ($course->videos as $video)
-                        @include('components.video-card')
-                      @endforeach
+                      @if ($course->videos->count())
+                        @foreach ($course->videos as $video)
+                          @include('components.video-card')
+                        @endforeach
+                      @endif
                     </ul>
                   </div>
                 </div>
@@ -87,7 +89,7 @@
               </form> --}}
               </div>
             </div>
-            <div class="px-3 tab-pane fade" id="course-info" role="tabpanel" aria-labelledby="course-info-tab">
+            <div class="pl-3 tab-pane fade" id="course-info" role="tabpanel" aria-labelledby="course-info-tab">
               <h3 class="text-primary mb-2 ml-2">Course Overview</h3>
               <hr>
               <div class="jumbotron mb-0">
