@@ -3,21 +3,18 @@
 namespace App\View\Components;
 
 use Illuminate\View\Component;
-use App\Models\Course;
 
-class CourseCard extends Component
+class Video extends Component
 {
-    public $course;
-    public $columns;
+    public $video;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($course, $columns)
+    public function __construct($video)
     {
-        $this->course = $course;
-        $this->columns = $columns;
+        $this->video = $video;
     }
 
     /**
@@ -27,6 +24,6 @@ class CourseCard extends Component
      */
     public function render()
     {
-        return view('components.course-card');
+        return view('components.video');
     }
 }

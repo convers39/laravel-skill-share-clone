@@ -24,9 +24,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $courses = Course::latest()->paginate(5);
-        return view('home', [
-            'courses' => $courses
-        ]);
+        $courses = Course::latest()->paginate(6);
+        return view('home', compact('courses'));
     }
 }

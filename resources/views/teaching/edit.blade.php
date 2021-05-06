@@ -58,7 +58,8 @@
               <hr>
               <div class="jumbotron mb-0">
                 <div class="">
-                  <h5>Videos Uploaded ( <small>{{ $course->videos->count() }} videos</small> )</h5>
+                  <h5>Videos Uploaded ( <small>{{ $course->videos->count() }}
+                      {{ Str::plural('video', $course->videos->count()) }}</small> )</h5>
                   <div class="my-3 h-50 overflow-auto border border-secondary rounded shadow-sm p-2">
                     <ul class="list-unstyled ">
                       @foreach ($course->videos as $video)

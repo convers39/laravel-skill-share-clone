@@ -6035,8 +6035,11 @@ a.badge-dark.focus {
 
 .list-group-item-light.list-group-item-action.active {
     color: #fff;
-    background-color: #7b7d7d;
-    border-color: #7b7d7d;
+    /* too dark !! */
+    /* background-color: #7b7d7d; */
+    /* border-color: #7b7d7d; */
+    background-color: #ecf0f0;
+    border-color: #ecf0f0;
 }
 
 .list-group-item-dark {
@@ -10522,9 +10525,33 @@ button.bg-dark:focus {
 }
 
 .text-truncate {
+    -webkit-line-clamp: 1;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
+    /* white-space: nowrap; */
+}
+
+/* Custom properties to control line clamp when truncating text */
+.text-line-clamp-xs {
+    -webkit-line-clamp: 2;
+}
+
+.text-line-clamp-sm {
+    -webkit-line-clamp: 3;
+}
+
+.text-line-clamp-md {
+    -webkit-line-clamp: 4;
+}
+
+.text-line-clamp-lg {
+    -webkit-line-clamp: 5;
+}
+
+.text-line-clamp-xl {
+    -webkit-line-clamp: 6;
 }
 
 .text-left {

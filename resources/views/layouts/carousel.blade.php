@@ -1,4 +1,4 @@
-<div class=" col-md-10 container-fluid mb-5">
+<div class=" col-md-12 container-fluid mb-5">
   <div id="home-carousel" class="carousel slide" data-ride="carousel">
     <ol class="carousel-indicators">
       <li data-target="#home-carousel" data-slide-to="0" class=""></li>

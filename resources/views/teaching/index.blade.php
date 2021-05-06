@@ -25,9 +25,9 @@
           <a href="{{ route('teaching.create') }}" class="btn btn-primary">New Course</a>
         @endforelse
       </div>
-      <div>
-        {{ $courses->links() }}
-      </div>
+    </div>
+    <div class="d-flex justify-content-center">
+      {!! $courses->links() !!}
     </div>
   </div>
 @endsection

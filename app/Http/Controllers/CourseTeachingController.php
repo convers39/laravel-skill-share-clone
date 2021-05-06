@@ -20,7 +20,7 @@ class CourseTeachingController extends Controller
     {
         $user = $request->user();
         $courses = $user->courses()->with(['user'])->paginate(5);
-        return view('teaching.index', ['courses' => $courses, 'user' => $user]);
+        return view('teaching.index', compact('courses', 'user'));
     }
 
     /**
@@ -39,7 +39,7 @@ class CourseTeachingController extends Controller
             'desc' => 'Course description',
         ]);
 
-        return redirect()->route('teaching.edit', ['course' => $course]);
+        return redirect()->route('teaching.edit', compact('course'));
     }
 
     /**

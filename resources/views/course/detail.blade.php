@@ -3,27 +3,47 @@
 @section('content')
   <!-- Page Content -->
   <div class="container">
-
     <!-- Heading Row -->
-    <div class="row align-items-center my-4">
-      <div class="col-lg-8">
-        <div class="embed-responsive embed-responsive-16by9">
-          <video id="{{ __('video') }}" class="embed-responsive-item" controls preload="auto"
-            poster="{{ asset('media/thumbnail/bunny.jpeg') }}">
-            <source src="{{ asset('media/video/test.mp4') }}" type="video/mp4">
-          </video>
-          {{-- <iframe class="embed-responsive-item" width="560" height="315" src="https://www.youtube.com/embed/AbCTlemwZ1k"
-            title="YouTube video player" frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen></iframe> --}}
-        </div>
-        {{-- <img class="img-fluid rounded mb-4 mb-lg-0" src="http://placehold.it/900x400" alt=""> --}}
+    <div class="row my-4">
+      <div class="col-lg-8 h-100">
+        @if ($videos->count())
+          <x-video :video="$currentVideo" />
+        @else
+          <div class="embed-responsive embed-responsive-16by9">
+            <video id="{{ __('sample-video') }}" poster="{{ asset('media/thumbnail/bunny.jpeg') }}"
+              class="embed-responsive-item" controls preload="auto">
+              <source src="{{ asset('media/video/test.mp4') }}" type="video/mp4">
+            </video>
+          </div>
+        @endif
       </div>
       <!-- /.col-lg-8 -->
-      <div class="col-lg-4">
-        <h1 class="font-weight-light">Playlist</h1>
-        <p>Placeholder for playlists.</p>
-        <a class="btn btn-primary" href="#">Call to Action!</a>
+      <div class="col-lg-4 px-0">
+        <div class="card w-100 h-100">
+          <div class="card-header text-center bg-secondary">
+            <h4 class="text-primary mb-0">Playlist</h4>
+          </div>
+          {{-- <div class="bg-dark"> --}}
+          <ul class="list-group list-group-flush overflow-auto" style="height:335px; ">
+            @if ($videos->count())
+              @foreach ($videos as $video_link)
+                <li
+                  class="list-group-item list-group-item-light list-group-item-action {{ Request::get('track') == $video_link->id ? 'active' : '' }}  ">
+                  <a class="text-decoration-none stretched-link text-truncate" href="?track={{ $video_link->id }}">
+                    #{{ $loop->index + 1 }} - {{ $video_link->title }}</a>
+                </li>
+              @endforeach
+            @endif
+            <li class="list-group-item list-group-item-light list-group-item-action">>sample1</li>
+            <li class="list-group-item list-group-item-light list-group-item-action">>sample1</li>
+            <li class="list-group-item list-group-item-light list-group-item-action">>sample1</li>
+            <li class="list-group-item list-group-item-light list-group-item-action">>sample1</li>
+            <li class="list-group-item list-group-item-light list-group-item-action">>sample1</li>
+            <li class="list-group-item list-group-item-light list-group-item-action">>sample1</li>
+            <li class="list-group-item list-group-item-light list-group-item-action">>sample1</li>
+          </ul>
+          {{-- </div> --}}
+        </div>
 
       </div>
       <!-- /.col-md-4 -->
@@ -52,28 +72,13 @@
             </div>
           </div>
           <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
-            Et et consectetur ipsum labore excepteur est proident excepteur ad velit occaecat qui minim occaecat veniam.
-            Fugiat veniam incididunt anim aliqua enim pariatur veniam sunt est aute sit dolor anim. Velit non irure
-            adipisicing aliqua ullamco irure incididunt irure non esse consectetur nostrud minim non minim occaecat. Amet
-            duis do nisi duis veniam non est eiusmod tempor incididunt tempor dolor ipsum in qui sit. Exercitation mollit
-            sit culpa nisi culpa non adipisicing reprehenderit do dolore. Duis reprehenderit occaecat anim ullamco ad duis
-            occaecat ex.
+            {{ __('Reviews') }}
           </div>
           <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
-            Et et consectetur ipsum labore excepteur est proident excepteur ad velit occaecat qui minim occaecat veniam.
-            Fugiat veniam incididunt anim aliqua enim pariatur veniam sunt est aute sit dolor anim. Velit non irure
-            adipisicing aliqua ullamco irure incididunt irure non esse consectetur nostrud minim non minim occaecat. Amet
-            duis do nisi duis veniam non est eiusmod tempor incididunt tempor dolor ipsum in qui sit. Exercitation mollit
-            sit culpa nisi culpa non adipisicing reprehenderit do dolore. Duis reprehenderit occaecat anim ullamco ad duis
-            occaecat ex.
+            {{ __('Discussion') }}
           </div>
           <div class="tab-pane fade" id="nav-about" role="tabpanel" aria-labelledby="nav-about-tab">
-            Et et consectetur ipsum labore excepteur est proident excepteur ad velit occaecat qui minim occaecat veniam.
-            Fugiat veniam incididunt anim aliqua enim pariatur veniam sunt est aute sit dolor anim. Velit non irure
-            adipisicing aliqua ullamco irure incididunt irure non esse consectetur nostrud minim non minim occaecat. Amet
-            duis do nisi duis veniam non est eiusmod tempor incididunt tempor dolor ipsum in qui sit. Exercitation mollit
-            sit culpa nisi culpa non adipisicing reprehenderit do dolore. Duis reprehenderit occaecat anim ullamco ad duis
-            occaecat ex.
+            {{ __('Resources') }}
           </div>
         </div>
 
@@ -97,89 +102,43 @@
             <span>Share</span>
           </div>
         </div>
-        <div class="row mb-3 justify-content-center bg-light">
-
-          {{-- <h2>
-            This area for teacher information
-          </h2> --}}
-          {{-- <div class="row profile">
-            <div class="col-md-3"> --}}
-          <div class="profile-sidebar">
-            <!-- SIDEBAR USERPIC -->
-            <div class="profile-userpic my-2">
+        <div class="row justify-content-center">
+          <div class="card w-100 px-3 shadow-sm border-light">
+            <div class="pt-3 text-center">
               <img width="100" height="100" src="{{ asset('media/img/avatar.jpg') }}"
                 class="img-responsive rounded-circle" alt="Avatar">
             </div>
-            <!-- END SIDEBAR USERPIC -->
-            <!-- SIDEBAR USER TITLE -->
-            <div class="profile-usertitle">
-              <div class="profile-usertitle-name">
-                {{ $course->user->name }}
-              </div>
-              <div class="profile-usertitle-job">
-                Developer
+            <div class="card-body text-center">
+              <p class="card-text">{{ $course->user->name }}</p>
+              <p class="card-text">About the teacher</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group col d-flex justify-content-center">
+                  <button type="button" class="btn btn-sm btn-outline-secondary">Profile</button>
+                  <button type="button" class="btn btn-sm btn-outline-secondary">Follow</button>
+                </div>
               </div>
             </div>
-            <!-- END SIDEBAR USER TITLE -->
-            <!-- SIDEBAR BUTTONS -->
-            {{-- <div class="profile-userbuttons">
-              <button type="button" class="btn btn-success btn-sm">Follow</button>
-              <button type="button" class="btn btn-danger btn-sm">Message</button>
-            </div> --}}
-            <!-- END SIDEBAR BUTTONS -->
-            <!-- SIDEBAR MENU -->
-            {{-- <div class="profile-usermenu mb-2">
-              <ul class="nav">
-                <li class="active">
-                  <a href="#">
-                    <i class="glyphicon glyphicon-home"></i>
-                    Overview </a>
-                </li>
-                <li>
-                  <a href="#">
-                    <i class="glyphicon glyphicon-user"></i>
-                    Account Settings </a>
-                </li>
-                <li>
-                  <a href="#" target="_blank">
-                    <i class="glyphicon glyphicon-ok"></i>
-                    Tasks </a>
-                </li>
-                <li>
-                  <a href="#">
-                    <i class="glyphicon glyphicon-flag"></i>
-                    Help </a>
-                </li>
-              </ul>
-            </div> --}}
-            <div class="profile-content my-2">
-              About the teacher
-            </div>
-            <!-- END MENU -->
           </div>
         </div>
       </div>
       {{-- </div>
       </div> --}}
     </div>
-    {{-- <!-- Call to Action Well -->
-    <div class="card text-white bg-secondary my-5 py-4 text-center">
-      <div class="card-body">
-        <p class="text-white m-0">This call to action card is a great place to showcase some important information or
-          display a clever tagline!</p>
-      </div>
-    </div> --}}
     <!-- Content Row -->
-    <h2 class='title'>Related Courses</h2>
+    <br>
+    <hr>
+    <h3 class='title'>Related Courses</h3>
     <div class="row my-4">
       @if ($relatedCourses->isNotEmpty())
-
         @foreach ($relatedCourses as $related)
           <div class="col-md-4 mb-5">
             <div class="card h-100">
+              <img
+                src="{{ Storage::exists($related->cover_img) ? asset('storage/' . $related->cover_img) : url($related->cover_img) }}"
+                class="card-img-top" width="auto" height="250px" alt="{{ $related->title }}">
               <div class="card-body">
                 <h2 class="card-title">{{ $related->title }}</h2>
-                <p class="card-text">{{ $related->desc }}</p>
+                <div class="card-text text-truncate text-line-clamp-md">{!! $related->desc !!}</div>
               </div>
               <div class="card-footer">
                 <a href="{{ route('course.show', ['course' => $related, 'slug' => $related->slug]) }}"
@@ -196,4 +155,33 @@
 
   </div>
   <!-- /.container -->
+@endsection
+
+@section('scripts')
+  {{-- <script>
+    window.onload = function() {
+      var video = document.getElementById('video');
+      var thumbCanvas = document.getElementById('thumbCanvas');
+      var thumbnail = document.getElementById('thumbnail');
+
+      video.addEventListener('pause', function() {
+        draw(video, thumbCanvas, thumbnail);
+      }, false);
+    };
+
+    function draw(video, thumbCanvas, thumbnail) {
+      // get the canvas context for drawing
+      var context = thumbCanvas.getContext('2d');
+
+      // draw the video contents into the canvas x, y, width, height
+      context.drawImage(video, 0, 0, thumbCanvas.width, thumbCanvas.height);
+
+      // get the image data from the canvas object
+      var dataURL = thumbCanvas.toDataURL();
+
+      // set the source of the thumbnail tag
+      thumbnail.setAttribute('src', dataURL);
+    }
+
+  </script> --}}
 @endsection
