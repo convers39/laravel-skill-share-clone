@@ -6,7 +6,7 @@
     <!-- Heading Row -->
     <div class="row my-4">
       <div class="col-lg-8 h-100">
-        @if ($videos->count())
+        @if ($currentVideo)
           <x-video :video="$currentVideo" />
         @else
           <div class="embed-responsive embed-responsive-16by9">

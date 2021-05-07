@@ -11,7 +11,7 @@
   <title>{{ config('app.name', 'Laravel') }}</title>
 
   <!-- Scripts -->
-  <script src="{{ asset('js/app.js') }}" defer></script>
+  <script src="{{ asset('js/app.js') }}"></script>
   {{-- <script src="https://unpkg.com/filepond/dist/filepond.js"></script> --}}
   @stack('scripts')
 
@@ -29,6 +29,7 @@
   <div id="app">
     @include('layouts.navbar')
     <main class="py-4 container">
+      @yield('modal')
       @include('flash-message')
       @yield('content')
     </main>

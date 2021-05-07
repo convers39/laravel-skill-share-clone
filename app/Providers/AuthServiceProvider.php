@@ -5,6 +5,9 @@ namespace App\Providers;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
+use App\Models\User;
+use App\Models\Video;
+
 class AuthServiceProvider extends ServiceProvider
 {
     /**
@@ -26,5 +29,12 @@ class AuthServiceProvider extends ServiceProvider
         $this->registerPolicies();
 
         //
+        Gate::define('update-video', function (User $user, Video $video) {
+            return $video && $user->is($video->course->user);
+        });
+
+        Gate::define('delete-video', function (User $user, Video $video) {
+            return $video && $user->is($video->course->user);
+        });
     }
 }

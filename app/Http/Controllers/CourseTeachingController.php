@@ -73,7 +73,8 @@ class CourseTeachingController extends Controller
      */
     public function edit(Course $course)
     {
-        return view('teaching.edit', ['course' => $course]);
+        $videos = $course->videos()->get();
+        return view('teaching.edit', compact('course', 'videos'));
     }
 
     /**

@@ -32,7 +32,7 @@
   @if ($errors->any())
     <div class="alert alert-danger alert-block fade show">
       <button type="button" class="close" data-dismiss="alert">×</button>
-      <strong>Error! </strong>
+      <strong>{!! implode('', $errors->all('<div>:message</div>')) !!} </strong>
     </div>
   @endif
 

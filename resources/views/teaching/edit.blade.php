@@ -24,8 +24,74 @@
   </script> --}}
 @endpush
 
-@section('content')
+@section('modal')
+  <div class="modal fade" id="video-update-modal" tabindex="-1" role="dialog" aria-labelledby="video-update-modal-label"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="video-update-modal-label">Edit Video Data</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="video-update-form" action="" method="post">
+            @method('PUT')
+            @csrf
+            <div class="form-group">
+              <label for="video-modal-title" class="col-form-label">Title:</label>
+              <input type="text" class="form-control" id="video-modal-title" name="title">
+            </div>
+            <div class="form-group">
+              <label for="video-modal-track" class="col-form-label">Track No.:</label>
+              <input type="number" class="form-control" id="video-modal-track" name="track" min="1" max="100">
+            </div>
+            <div class="form-group">
+              <label for="video-modal-summary" class="col-form-label">Summary:</label>
+              <textarea class="form-control" id="video-modal-summary" name="summary"></textarea>
+            </div>
+            {{-- <div class="form-group">
+              <label for="video-modal-thumbnail" class="col-form-label">Thumbnail:</label>
+              <input type="file" class="form-control" id="video-modal-thumbnail">
+            </div> --}}
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button form="video-update-form" type="submit" class="btn btn-primary" id="video-modal-save">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="video-delete-modal" tabindex="-1" role="dialog" aria-labelledby="video-delete-modal-label"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="video-delete-modal-label">Delete Video</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="video-delete-form" action="" method="post">
+            @method('DELETE')
+            @csrf
+            <h5>This video will be deleted!</h5>
+            <div id="video-delete-data" class="text-primary"></div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="submit" form="video-delete-form" class="btn btn-danger">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+@endsection
 
+@section('content')
   <!-- Page Content -->
   <div class="container row justify-content-center mx-auto">
     <div class="row justify-content-between col-md-12 my-4 py-2">
@@ -58,12 +124,12 @@
               <hr>
               <div class="jumbotron mb-0">
                 <div class="">
-                  <h5>Videos Uploaded ( <small>{{ $course->videos->count() }}
-                      {{ Str::plural('video', $course->videos->count()) }}</small> )</h5>
+                  <h5>Videos Uploaded ( <small>{{ $videos->count() }}
+                      {{ Str::plural('video', $videos->count()) }}</small> )</h5>
                   <div class="my-3 h-50 overflow-auto border border-secondary rounded shadow-sm p-2">
                     <ul class="list-unstyled ">
-                      @if ($course->videos->count())
-                        @foreach ($course->videos as $video)
+                      @if ($videos->count())
+                        @foreach ($videos as $video)
                           @include('components.video-card')
                         @endforeach
                       @endif
@@ -78,15 +144,6 @@
                   <input type="file" class="filepond" id="video-upload" name="videoFile" multiple>
                   <input type="text" hidden id="video-file-list" name="videoFileList">
                 </div>
-                {{-- <form class="px-3 row justify-content-between align-items-center" action="">
-                <div class="form-group">
-                  <input type="file" class="form-control-file" id="video-upload" aria-describedby="fileHelp">
-                  <small class="form-text text-muted">Upload a video file.</small>
-                </div>
-                <div>
-                  <button type="submit" class="btn btn-primary">Upload</button>
-                </div>
-              </form> --}}
               </div>
             </div>
             <div class="pl-3 tab-pane fade" id="course-info" role="tabpanel" aria-labelledby="course-info-tab">
@@ -112,8 +169,6 @@
                     <h5>Cover Image</h5>
                   </label>
                   <input type="file" class="filepond" id="cover-upload" name="coverFile">
-                  {{-- <small class="form-text text-muted">This image will be dispalyed as your course
-                  poster.</small> --}}
                 </div>
 
               </div>
@@ -123,9 +178,8 @@
       </div>
     </div>
   </div>
-
-  <!-- /.container -->
 @endsection
+
 @section('scripts')
   <script type="text/javascript">
     ClassicEditor
@@ -133,6 +187,39 @@
       .catch(error => {
         console.error(error);
       });
+
+  </script>
+  <script type="text/javascript">
+    $(function() {
+      $('#video-update-modal').on('show.bs.modal', function(event) {
+        let button = $(event.relatedTarget)
+
+        let id = button.data('id')
+        $('#video-update-form').attr('action', `/videos/${id}`)
+
+        let title = button.data('title')
+        let track = button.data('track')
+        let summary = button.data('summary')
+
+        const videoModal = $(this)
+        videoModal.find('#video-modal-title').val(title)
+        videoModal.find('#video-modal-track').val(track)
+        videoModal.find('#video-modal-summary').val(summary)
+      })
+
+
+      $('#video-delete-modal').on('show.bs.modal', function(event) {
+        let button = $(event.relatedTarget)
+
+        let id = button.data('id')
+        $('#video-delete-form').attr('action', `/videos/${id}`)
+
+
+        let title = button.data('delete')
+        const deleteModal = $(this)
+        deleteModal.find('#video-delete-data').text(title)
+      })
+    })
 
   </script>
   <script src="{{ asset('js/filepondUpload.js') }}"> </script>

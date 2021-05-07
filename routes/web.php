@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\UploadController;
+use App\Http\Controllers\VideoController;
 use App\Http\Controllers\CourseTeachingController;
 /*
 |--------------------------------------------------------------------------
@@ -51,10 +52,9 @@ Route::resource(
 // Route::get('/teaching/{course}', [CourseTeachingController::class, 'show'])->name('teaching.show');
 // Route::get('/teaching/{course}/edit', [CourseTeachingController::class, 'edit'])->name('teaching.edit');
 // Route::put('/teaching/{course}', [CourseTeachingController::class, 'update'])->name('teaching.update');
-// Route::delete('/teaching/delete/{course}', [CourseTeachingController::class, 'destroy'])->name('teaching.destroy');
+// Route::delete('/teaching/{course}', [CourseTeachingController::class, 'destroy'])->name('teaching.destroy');
 
 Route::post('/teaching/{course}/upload', [UploadController::class, 'store']);
 Route::delete('/teaching/{course}/revert', [UploadController::class, 'destroy']);
 
-// Route::post('/teaching/{course}/upload', [VideoController::class, 'store']);
-// Route::delete('/teaching/{course}/revert', [VideoController::class, 'destroy']);
+Route::resource('videos', VideoController::class,)->except(['store'])->parameters(['videos' => 'videoId']);
