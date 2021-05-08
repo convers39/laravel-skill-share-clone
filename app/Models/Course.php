@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use App\Models\User;
 use App\Models\Video;
+use App\Models\Category;
 
 
 class Course extends Model
@@ -30,6 +31,13 @@ class Course extends Model
         'video_count',
         'save_count',
     ];
+    public function save(array $options = [])
+    {
+        // add slug on save
+
+        return parent::save();
+    }
+
 
     public function getSlugAttribute()
     {
@@ -39,6 +47,11 @@ class Course extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
     }
 
     public function videos()
