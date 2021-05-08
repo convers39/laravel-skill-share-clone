@@ -10,7 +10,7 @@
     {{-- <strong class="d-inline-block mb-2 text-primary">{{ $course->title }}</strong> --}}
     <h4 class="d-flex justify-content-between align-items-center mb-1">
       <span class="text-primary text-truncate">{{ $course->title }}</span>
-      @if ($course->is_published)
+      @if ($course->published)
         <span class="badge badge-success">
           <h6 class="mb-0">Published</h6>
         </span>

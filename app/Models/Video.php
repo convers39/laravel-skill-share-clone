@@ -17,6 +17,7 @@ class Video extends Model
         'course_id',
         'title',
         'thumbnail',
+        'track',
         'views',
         'summary',
         'url',

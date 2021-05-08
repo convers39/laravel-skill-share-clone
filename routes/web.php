@@ -6,6 +6,8 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\VideoController;
 use App\Http\Controllers\CourseTeachingController;
+use Illuminate\Http\Request;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -43,18 +45,21 @@ Route::get('/courses/{course}/{slug}', [CourseController::class, 'show'])->name(
 Route::resource(
     'teaching',
     CourseTeachingController::class,
-)->except(['store'])->parameters(['teaching' => 'course'])->middleware(['auth']);
+)->except(['store', 'show'])->parameters(['teaching' => 'course'])->middleware(['auth']);
 
 // equivalent to below
 // Route::get('/teaching', [CourseTeachingController::class, 'index'])->name('teaching');
 // Route::get('/teaching/create', [CourseTeachingController::class, 'create'])->name('teaching.create');
 // Route::post('/teaching', [CourseTeachingController::class, 'store'])->name('teaching.store');
-// Route::get('/teaching/{course}', [CourseTeachingController::class, 'show'])->name('teaching.show');
+Route::get('/teaching/{course}/preview', [CourseTeachingController::class, 'show'])->name('teaching.show');
 // Route::get('/teaching/{course}/edit', [CourseTeachingController::class, 'edit'])->name('teaching.edit');
 // Route::put('/teaching/{course}', [CourseTeachingController::class, 'update'])->name('teaching.update');
 // Route::delete('/teaching/{course}', [CourseTeachingController::class, 'destroy'])->name('teaching.destroy');
 
 Route::post('/teaching/{course}/upload', [UploadController::class, 'store']);
 Route::delete('/teaching/{course}/revert', [UploadController::class, 'destroy']);
+Route::patch('/teaching/{courseId}/publish', [CourseTeachingController::class, 'publish']);
 
-Route::resource('videos', VideoController::class,)->except(['store'])->parameters(['videos' => 'videoId']);
+Route::resource('videos', VideoController::class,)
+    ->except(['store'])
+    ->parameters(['videos' => 'videoId']);

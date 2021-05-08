@@ -29,8 +29,8 @@
   <div id="app">
     @include('layouts.navbar')
     <main class="py-4 container">
+      @include('layouts.flash-message')
       @yield('modal')
-      @include('flash-message')
       @yield('content')
     </main>
   </div>

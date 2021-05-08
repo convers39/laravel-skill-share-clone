@@ -81,7 +81,7 @@ class VideoController extends Controller
      */
     public function update(VideoFormRequest $request, $videoId)
     {
-        Video::find($videoId)->update($request->all());
+        Video::find($videoId)->update($request->validated());
         return back()->with('success', 'Video has been updated!');
     }
 
@@ -89,7 +89,6 @@ class VideoController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Video  $video
-     * @param  VideoFormRequest $request
      * @return \Illuminate\Http\Response
      */
     public function destroy($videoId)

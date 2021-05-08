@@ -7,6 +7,8 @@ use App\Models\Video;
 use App\Models\TempFile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+
 
 
 class CourseTeachingController extends Controller
@@ -60,9 +62,16 @@ class CourseTeachingController extends Controller
      * @param  \App\Models\Course  $course
      * @return \Illuminate\Http\Response
      */
-    public function show(Course $course)
+    public function show(Request $request, Course $course)
     {
-        //
+        if ($course->published) {
+            return redirect()->route('course.show', ['course' => $course, 'slug' => $course->slug]);
+        }
+
+        $videos = $course->videos()->orderBy('track')->get();
+        $track = $request->input('track');
+        $currentVideo =  $videos->where('track', $track)->first() ?? $videos->first();
+        return view('teaching.preview', compact('course', 'videos', 'currentVideo'));
     }
 
     /**
@@ -75,6 +84,34 @@ class CourseTeachingController extends Controller
     {
         $videos = $course->videos()->get();
         return view('teaching.edit', compact('course', 'videos'));
+    }
+
+    /**
+     * Publish or unpublish a course
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Course  $course
+     * @return \Illuminate\Http\Response
+     */
+    public function publish(Request $request, Course $course)
+    {
+        $id = $request->route('courseId');
+        try {
+            $course = Course::findOrFail($id);
+        } catch (ModelNotFoundException $exception) {
+            return back()->with('error', $exception->getMessage());
+        }
+
+        $course->published = !$course->published;
+        $course->save();
+
+        if ($course->published) {
+            return redirect()
+                ->route('course.show', ['course' => $course, 'slug' => $course->slug])
+                ->with('success', 'Course published successfully');
+        }
+
+        return back()->with('success', 'Course is now unpublished.');
     }
 
     /**
@@ -109,19 +146,18 @@ class CourseTeachingController extends Controller
                 $temp_file = TempFile::where('folder', $folder)->first();
                 if ($temp_file) {
                     // retrieve file path and target path
-                    $filepath = "{$temp_file->prefix}/tmp/{$temp_file->folder}/{$temp_file->filename}";
-                    $target_path = "{$temp_file->prefix}/{$course->id}/{$temp_file->filename}";
-                    // move temp file to target folder, Storage will attach prefix in disk setting
-                    Storage::move($filepath, $target_path);
-                    // save video instance
-                    Video::create([
-                        'course_id' => $course->id,
-                        'title' => $temp_file->filename,
-                        'url' => $target_path
-                    ]);
-                    // remove temp directory and temp file record
-                    rmdir(storage_path("app/public/{$temp_file->prefix}/tmp/{$temp_file->folder}/"));
-                    $temp_file->delete();
+                    [$filepath, $target_path] = $this->getFilePath($temp_file, $course->id);
+                    $this->moveFile($temp_file, $filepath, $target_path);
+                    // create video instance if file not exists
+                    if (!Storage::exists($target_path)) {
+                        $count = $course->videos->count();
+                        Video::create([
+                            'course_id' => $course->id,
+                            'title' => $temp_file->filename,
+                            'url' => $target_path,
+                            'track' => $count + 1
+                        ]);
+                    }
                 }
             }
         }
@@ -134,22 +170,17 @@ class CourseTeachingController extends Controller
 
         if ($temp_file) {
             // retrieve file path and target path
-            $filepath = "{$temp_file->prefix}/tmp/{$temp_file->folder}/{$temp_file->filename}";
-            $target_path = "{$temp_file->prefix}/{$course->id}/{$temp_file->filename}";
-            // check if current course already has a cover image
-            if ($course->cover_img && Storage::exists($course->cover_img)) {
-                Storage::delete($course->cover_img);
-            }
-            // move temp file to target folder, Storage will attach prefix in disk setting
-            Storage::move($filepath, $target_path);
+            [$filepath, $target_path] = $this->getFilePath($temp_file, $course->id);
             // save to course img url prop
             $course->cover_img = $target_path;
             $course->save();
-            // remove temp directory and temp file record
-            rmdir(storage_path("app/public/{$temp_file->prefix}/tmp/{$temp_file->folder}/"));
-            $temp_file->delete();
+            $this->moveFile($temp_file, $filepath, $target_path);
         }
-        return back()->with('success', 'Course updated successfully');
+
+        $message = $course->wasChanged()
+            ? "Course updated successfully"
+            : "No Data was changed";
+        return back()->with('success', $message);
     }
 
     /**
@@ -162,5 +193,26 @@ class CourseTeachingController extends Controller
     {
         $course->delete();
         return back()->with('success', 'Course deleted successfully');
+    }
+
+    private function getFilePath(TempFile $temp_file, $course_id)
+    {
+        $filepath = "{$temp_file->prefix}/tmp/{$temp_file->folder}/{$temp_file->filename}";
+        $target_path = "{$temp_file->prefix}/{$course_id}/{$temp_file->filename}";
+        return [$filepath, $target_path];
+    }
+
+    private function moveFile(TempFile $temp_file, $filepath, $target_path)
+    {
+        // overwrite if file exists
+        if (Storage::exists($target_path)) {
+            Storage::delete($target_path);
+        }
+        // move temp file to target folder, Storage will attach prefix in disk setting
+        Storage::move($filepath, $target_path);
+        // remove temp directory and temp file record
+        rmdir(storage_path("app/public/{$temp_file->prefix}/tmp/{$temp_file->folder}/"));
+        $temp_file->delete();
+        return;
     }
 }

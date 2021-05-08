@@ -7,6 +7,12 @@ use App\Models\Video;
 
 class VideoFormRequest extends FormRequest
 {
+
+    protected function prepareForValidation()
+    {
+        $this->merge(['video_id' => $this->route('videoId')]);
+    }
+
     /**
      * Determine if the user is authorized to make this request.
      *
@@ -15,6 +21,9 @@ class VideoFormRequest extends FormRequest
     public function authorize()
     {
         $video = Video::find($this->route('videoId'));
+        if (!$video) {
+            return back();
+        }
         switch ($this->method()) {
             case 'put':
             case 'PUT':
@@ -25,13 +34,6 @@ class VideoFormRequest extends FormRequest
 
             default:
                 return false;
-        }
-        return false;
-    }
-    protected function prepareForValidation()
-    {
-        if ($this->isMethod('delete')) {
-            $this->merge(['video_id' => $this->route('videoId')]);
         }
     }
 
@@ -47,6 +49,7 @@ class VideoFormRequest extends FormRequest
             case 'put':
             case 'PUT':
                 return [
+                    'video_id' => 'required|exists:videos,id',
                     'title' => 'required|max:255',
                     'track' => 'integer|digits_between:1,100',
                     'summary' => 'nullable|max:500',

@@ -25,70 +25,7 @@
 @endpush
 
 @section('modal')
-  <div class="modal fade" id="video-update-modal" tabindex="-1" role="dialog" aria-labelledby="video-update-modal-label"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="video-update-modal-label">Edit Video Data</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <form id="video-update-form" action="" method="post">
-            @method('PUT')
-            @csrf
-            <div class="form-group">
-              <label for="video-modal-title" class="col-form-label">Title:</label>
-              <input type="text" class="form-control" id="video-modal-title" name="title">
-            </div>
-            <div class="form-group">
-              <label for="video-modal-track" class="col-form-label">Track No.:</label>
-              <input type="number" class="form-control" id="video-modal-track" name="track" min="1" max="100">
-            </div>
-            <div class="form-group">
-              <label for="video-modal-summary" class="col-form-label">Summary:</label>
-              <textarea class="form-control" id="video-modal-summary" name="summary"></textarea>
-            </div>
-            {{-- <div class="form-group">
-              <label for="video-modal-thumbnail" class="col-form-label">Thumbnail:</label>
-              <input type="file" class="form-control" id="video-modal-thumbnail">
-            </div> --}}
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button form="video-update-form" type="submit" class="btn btn-primary" id="video-modal-save">Save</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="modal fade" id="video-delete-modal" tabindex="-1" role="dialog" aria-labelledby="video-delete-modal-label"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="video-delete-modal-label">Delete Video</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <form id="video-delete-form" action="" method="post">
-            @method('DELETE')
-            @csrf
-            <h5>This video will be deleted!</h5>
-            <div id="video-delete-data" class="text-primary"></div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-          <button type="submit" form="video-delete-form" class="btn btn-danger">Delete</button>
-        </div>
-      </div>
-    </div>
-  </div>
+  @include('teaching.video-modal')
 @endsection
 
 @section('content')
@@ -99,19 +36,37 @@
       <div class="px-1">
         <h2>{{ $course->title }} </h2>
         <input hidden id="course-id" value="{{ $course->id }}" />
-        @if (!$course->is_published)
-          <small>This course is saved as draft.</small>
+        @if (!$course->published)
+          <small>This course is saved as <span class="badge badge-pill badge-warning">Draft</span>:<a
+              href="{{ route('teaching.show', ['course' => $course]) }}">Preview</a>
+          </small>
+        @else
+          <small>This course is <span class="badge badge-pill badge-success">Published</span>: <a
+              href="{{ route('course.show', ['course' => $course, 'slug' => $course->slug]) }}">Check</a></small>
         @endif
       </div>
       <div class="px-1">
         <button type="submit" form="course-form" id="save-draft" class="btn btn-outline-success mx-1">Save
-          Draft</button>
-        <button type="submit" id="publish" class="btn btn-success mx-1">Publish</button>
+          Change</button>
+        @if ($course->published)
+          <span class="d-inline-block" data-toggle="tooltip" data-placement="bottom" tabindex="0"
+            title="Set course to private">
+            <a id="publish" data-toggle="modal" data-target="#publish-modal" data-text="private"
+              data-id="{{ $course->id }}" class="btn btn-warning text-white mx-1">Unpublish</a>
+          </span>
+        @else
+          <span class="d-inline-block" data-toggle="tooltip" data-placement="bottom" tabindex="0"
+            title="Require at least 1 video">
+            <a id="publish" data-toggle="modal" data-target="#publish-modal" data-text="published"
+              data-id="{{ $course->id }}"
+              class="btn btn-success text-white mx-1 {{ $videos->count() ? '' : 'disabled' }}">Publish</a>
+          </span>
+        @endif
       </div>
       {{-- </div> --}}
     </div>
     <div class="row col-md-12 my-3 h-100">
-      @include('layouts.sidebar')
+      @include('teaching.sidebar')
       <div class="col-md-8 col-lg-9 pr-0">
         <form method="post" id="course-form" action="/teaching/{{ $course->id }}" enctype="multipart/form-data">
           <div class="tab-content flex-fill " id="course-tab-content">
@@ -130,7 +85,7 @@
                     <ul class="list-unstyled ">
                       @if ($videos->count())
                         @foreach ($videos as $video)
-                          @include('components.video-card')
+                          <x-video-card :video="$video" />
                         @endforeach
                       @endif
                     </ul>
@@ -187,40 +142,11 @@
       .catch(error => {
         console.error(error);
       });
-
-  </script>
-  <script type="text/javascript">
     $(function() {
-      $('#video-update-modal').on('show.bs.modal', function(event) {
-        let button = $(event.relatedTarget)
-
-        let id = button.data('id')
-        $('#video-update-form').attr('action', `/videos/${id}`)
-
-        let title = button.data('title')
-        let track = button.data('track')
-        let summary = button.data('summary')
-
-        const videoModal = $(this)
-        videoModal.find('#video-modal-title').val(title)
-        videoModal.find('#video-modal-track').val(track)
-        videoModal.find('#video-modal-summary').val(summary)
-      })
-
-
-      $('#video-delete-modal').on('show.bs.modal', function(event) {
-        let button = $(event.relatedTarget)
-
-        let id = button.data('id')
-        $('#video-delete-form').attr('action', `/videos/${id}`)
-
-
-        let title = button.data('delete')
-        const deleteModal = $(this)
-        deleteModal.find('#video-delete-data').text(title)
-      })
+      $('[data-toggle="tooltip"]').tooltip()
     })
 
   </script>
+  <script src="{{ asset('js/videoModal.js') }}"></script>
   <script src="{{ asset('js/filepondUpload.js') }}"> </script>
 @endsection
