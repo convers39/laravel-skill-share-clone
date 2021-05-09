@@ -9,7 +9,7 @@ class CourseController extends Controller
 {
     public function index()
     {
-        $courses = Course::latest('updated_at')->with(['user'])->paginate(6);
+        $courses = Course::latest('updated_at')->published()->with(['user'])->paginate(6);
         return view('course.list', compact('courses'));
     }
 

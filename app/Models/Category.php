@@ -16,8 +16,20 @@ class Category extends Model
         return $this->hasMany(Course::class);
     }
 
-    public function parentId()
+    public function parent()
     {
-        return $this->belongsTo(self::class);
+        return $this->belongsTo(self::class)->with('parent');
+    }
+
+    // only direct children categories
+    public function children()
+    {
+        return $this->hasMany(self::class, 'parent_id');
+    }
+
+    // get all descendant categories recursively
+    public function descendants()
+    {
+        return $this->hasMany(self::class, 'parent_id')->with('descendants');
     }
 }

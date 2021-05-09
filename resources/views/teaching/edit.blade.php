@@ -85,7 +85,7 @@
                     <ul class="list-unstyled ">
                       @if ($videos->count())
                         @foreach ($videos as $video)
-                          <x-video-card :video="$video" />
+                          <x-video-card :video="$video" :categories="$categories" />
                         @endforeach
                       @endif
                     </ul>
@@ -101,33 +101,7 @@
                 </div>
               </div>
             </div>
-            <div class="pl-3 tab-pane fade" id="course-info" role="tabpanel" aria-labelledby="course-info-tab">
-              <h3 class="text-primary mb-2 ml-2">Course Overview</h3>
-              <hr>
-              <div class="jumbotron mb-0">
-
-                <div class="form-group">
-                  <label for="course-title">
-                    <h5>Course Title </h5>
-                  </label>
-                  <input type="text" class="form-control" id="course-title" name="title" value="{{ $course->title }}">
-                </div>
-                <div class="form-group">
-                  <label for="course-description">
-                    <h5>Course Description</h5>
-                  </label>
-                  <textarea id="course-description" name="desc">{{ $course->desc }}</textarea>
-                  {{-- <textarea class="ckeditor form-control" name="ckeditor"></textarea> --}}
-                </div>
-                <div class="form-group">
-                  <label for="cover-upload">
-                    <h5>Cover Image</h5>
-                  </label>
-                  <input type="file" class="filepond" id="cover-upload" name="coverFile">
-                </div>
-
-              </div>
-            </div>
+            <x-course-info :course="$course" />
           </div>
         </form>
       </div>

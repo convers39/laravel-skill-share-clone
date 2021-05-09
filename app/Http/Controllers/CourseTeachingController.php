@@ -123,59 +123,29 @@ class CourseTeachingController extends Controller
      */
     public function update(Request $request, Course $course)
     {
-        // dd($request->all());
+        // TODO: separate validation to FormRequest
         //validate the request
         $request->validate([
             'title' => 'required',
-            'desc' => 'required'
+            'desc' => 'required',
+            'category_id' => 'required',
         ]);
-
-        $form_data = $request->all();
-        $desc = $form_data['desc'];
-        $course->update([
-            'title' => $form_data['title'],
-            'desc' => $desc
-        ]);
+        // dd($request->all());
+        $course->update($request->only('title', 'desc', 'category_id'));
 
         // check video file list
-        $video_files = isset($form_data['videoFileList'])
-            ? array_filter(explode(',', $form_data['videoFileList']))
+        $video_files = isset($request['videoFileList'])
+            ? array_filter(explode(',', $request->input('videoFileList')))
             : [];
         if (!empty($video_files)) {
-            foreach ($video_files as $folder) {
-                $temp_file = TempFile::where('folder', $folder)->first();
-                if ($temp_file) {
-                    // retrieve file path and target path
-                    [$filepath, $target_path] = $this->getFilePath($temp_file, $course->id);
-                    $this->moveFile($temp_file, $filepath, $target_path);
-                    // create video instance if file not exists
-                    if (!Storage::exists($target_path)) {
-                        $count = $course->videos->count();
-                        Video::create([
-                            'course_id' => $course->id,
-                            'title' => $temp_file->filename,
-                            'url' => $target_path,
-                            'track' => $count + 1
-                        ]);
-                    }
-                }
-            }
+            $this->handleVideoFiles($video_files, $course);
         }
 
         // check if form includes cover file
-        $cover_folder = isset($form_data['coverFile'])
-            ? json_decode($form_data['coverFile'], TRUE)['folder']
+        $cover_folder = isset($request['coverFile'])
+            ? json_decode($request->input('coverFile'), TRUE)['folder']
             : null;
-        $temp_file = TempFile::where('folder', $cover_folder)->first();
-
-        if ($temp_file) {
-            // retrieve file path and target path
-            [$filepath, $target_path] = $this->getFilePath($temp_file, $course->id);
-            // save to course img url prop
-            $course->cover_img = $target_path;
-            $course->save();
-            $this->moveFile($temp_file, $filepath, $target_path);
-        }
+        $this->handleCoverFile($cover_folder, $course);
 
         $message = $course->wasChanged()
             ? "Course updated successfully"
@@ -193,6 +163,44 @@ class CourseTeachingController extends Controller
     {
         $course->delete();
         return back()->with('success', 'Course deleted successfully');
+    }
+
+    private function handleVideoFiles(array $folders, Course $course)
+    {
+        foreach ($folders as $folder) {
+            $temp_file = TempFile::where('folder', $folder)->first();
+            if ($temp_file) {
+                // retrieve file path and target path
+                [$filepath, $target_path] = $this->getFilePath($temp_file, $course->id);
+                // create video instance if the file does not exist
+                if (!Storage::exists($target_path)) {
+                    $count = $course->videos->count();
+                    Video::create([
+                        'course_id' => $course->id,
+                        'title' => $temp_file->filename,
+                        'url' => $target_path,
+                        'track' => $count + 1
+                    ]);
+                }
+                // overwrite old file if the file exists
+                $this->moveFile($temp_file, $filepath, $target_path);
+            }
+        }
+        return;
+    }
+
+    private function handleCoverFile($folder, Course $course)
+    {
+        $temp_file = TempFile::where('folder', $folder)->first();
+        if ($temp_file) {
+            // retrieve file path and target path
+            [$filepath, $target_path] = $this->getFilePath($temp_file, $course->id);
+            // save to course img url prop
+            $course->cover_img = $target_path;
+            $course->save();
+            $this->moveFile($temp_file, $filepath, $target_path);
+        }
+        return;
     }
 
     private function getFilePath(TempFile $temp_file, $course_id)

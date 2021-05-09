@@ -12,19 +12,21 @@
   </div>
   <hr>
   <div class="bg-light">
-    <div class="list-group list-group-flush">
-      <li class="list-group-item list-group-item-light list-group-item-action">
-        <a href="#" class="stretched-link text-decoration-none">Cate1</a>
-      </li>
-      <li class="list-group-item list-group-item-light list-group-item-action">
-        <a href="#" class="stretched-link text-decoration-none">Cate2</a>
-      </li>
-      <li class="list-group-item list-group-item-light list-group-item-action">
-        <a href="#" class="stretched-link text-decoration-none">Cate3</a>
-      </li>
-      <li class="list-group-item list-group-item-light list-group-item-action">
-        <a href="#" class="stretched-link text-decoration-none">Cate4</a>
-      </li>
-    </div>
+    <ul class="list-group list-group-flush">
+      @foreach ($categories as $category)
+        <li
+          class="list-group-item list-group-item-{{ $category->children->count() ? 'dark' : 'light' }} list-group-item-action">
+          <a href="#" class="stretched-link text-decoration-none">
+            {{ $category->name }}
+          </a>
+        </li>
+        <ul class="list-group list-group-flush">
+          @foreach ($category->descendants as $child)
+            @include('course.child-category', ['child' => $child])
+          @endforeach
+        </ul>
+      @endforeach
+
+    </ul>
   </div>
 </div>

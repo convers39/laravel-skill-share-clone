@@ -25,6 +25,7 @@ class Course extends Model
     protected $fillable = [
         'title',
         'desc',
+        'category_id',
         'cover_img',
         'published',
         'tags',
@@ -38,6 +39,10 @@ class Course extends Model
         return parent::save();
     }
 
+    public function scopePublished($query)
+    {
+        return $query->where('published', true);
+    }
 
     public function getSlugAttribute()
     {
