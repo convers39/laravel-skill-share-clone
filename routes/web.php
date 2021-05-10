@@ -7,6 +7,7 @@ use App\Http\Controllers\UploadController;
 use App\Http\Controllers\VideoController;
 use App\Http\Controllers\CourseTeachingController;
 use App\Http\Controllers\CourseSaveController;
+use App\Http\Controllers\BookmarkController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,10 +42,12 @@ Route::post('/accounts/{name}', [UserProfileController::class, 'update'])->name(
 Route::get('/browse/{category?}', [CourseController::class, 'index'])->name('course');
 Route::get('/courses/{course:slug}', [CourseController::class, 'show'])->name('course.show');
 
+Route::post('/courses/{course}/bookmark', [BookmarkController::class, 'toggle'])->name('bookmark.toggle')->middleware(['auth']);
+
 // saved courses
 Route::middleware(['auth'])->group(function () {
     Route::get('/saved-courses', [CourseSaveController::class, 'index'])->name('bookmark');
-    Route::get('/saved-courses/{course}', [CourseSaveController::class, 'save'])->name('bookmark.save');
+    // Route::get('/saved-courses/{course}', [CourseSaveController::class, 'save'])->name('bookmark.save');
 });
 // course create and edit
 Route::resource(

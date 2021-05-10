@@ -1,4 +1,4 @@
-<div class="col col-md-12 px-4">
+<div class="col col-md-12">
 
 
   @if ($message = Session::get('success'))

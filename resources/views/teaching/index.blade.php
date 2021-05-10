@@ -3,7 +3,6 @@
 @section('content')
   <div class="container">
     <div class="row justify-content-center">
-
     </div>
     <br>
     <h2>My Teaching Courses</h2>

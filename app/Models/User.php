@@ -57,6 +57,11 @@ class User extends \TCG\Voyager\Models\User
         return $this->hasMany(Course::class);
     }
 
+    public function bookmarks()
+    {
+        return $this->hasMany(Bookmark::class);
+    }
+
     public function videos()
     {
         return $this->hasManyThrough(Video::class, Course::class);

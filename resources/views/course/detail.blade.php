@@ -18,7 +18,7 @@
         @endif
       </div>
       <!-- /.col-lg-8 -->
-      <div class="col-lg-4 px-0">
+      <div class="col-lg-4 pl-0">
         <div class="card w-100 h-100">
           <div class="card-header text-center bg-secondary">
             <h4 class="text-primary mb-0">Playlist</h4>
@@ -30,7 +30,7 @@
                 <li
                   class="list-group-item list-group-item-light list-group-item-action {{ Request::get('track') == $video_link->id ? 'active' : '' }}  ">
                   <a class="text-decoration-none stretched-link text-truncate" href="?track={{ $video_link->id }}">
-                    #{{ $loop->index + 1 }} - {{ $video_link->title }}</a>
+                    {{ $loop->index + 1 }} - {{ $video_link->title }}</a>
                 </li>
               @endforeach
             @endif
@@ -41,15 +41,14 @@
           </ul>
           {{-- </div> --}}
         </div>
-
       </div>
       <!-- /.col-md-4 -->
     </div>
     <!-- /.row -->
 
     {{-- tab area --}}
-    <div class="row my-4">
-      <div class="col-lg-8 ">
+    <div class="row justfy-content-center my-4">
+      <div class="col-lg-8">
         <nav>
           <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
             <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab"
@@ -78,14 +77,17 @@
             {{ __('Resources') }}
           </div>
         </div>
-
       </div>
-      <div class="col-lg-4 text-center">
+      <div class="col-lg-4 pl-0 text-center">
+        {{-- Bookmark course --}}
         <div class="row mb-3">
-          <div class="col-md-6 p-2">
-            <a class="text-decoration-none stretched-link" id="save-course"
-              href="{{ route('bookmark.save', ['course' => $course]) }}">
-              @if ($course->isSavedByUser(auth()->user()))
+          <div class="col-md-6 p-2 ">
+            <form class="d-none" id="bookmark-form" method="post"
+              action="{{ route('bookmark.toggle', ['course' => $course]) }}">
+              @csrf
+            </form>
+            <button form="bookmark-form" class="btn btn-link text-decoration-none" id="save-course">
+              @if ($course->isSavedBy(auth()->user()))
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                   class="bi bi-bookmark-check-fill" viewBox="0 0 16 16">
                   <path fill-rule="evenodd"
@@ -100,19 +102,21 @@
                 </svg>
                 <span>Save</span>
               @endif
-            </a>
+            </button>
           </div>
           <div class="col-md-6 p-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-share"
-              viewBox="0 0 16 16">
-              <path
-                d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5zm-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z" />
-            </svg>
-            <span>Share</span>
+            <button class="btn btn-link text-decoration-none">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-share"
+                viewBox="0 0 16 16">
+                <path
+                  d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5zm-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z" />
+              </svg>
+              <span>Share</span>
+            </button>
           </div>
         </div>
         <div class="row justify-content-center">
-          <div class="card w-100 px-3 shadow-sm border-light">
+          <div class="card px-3 shadow-sm border-light">
             <div class="pt-3 text-center">
               <img width="100" height="100" src="{{ asset('media/img/avatar.jpg') }}"
                 class="img-responsive rounded-circle" alt="Avatar">

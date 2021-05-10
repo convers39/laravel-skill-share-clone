@@ -39,9 +39,9 @@ class Course extends Model
     //     return 'slug';
     // }
 
-    public function isSavedByUser(User $user)
+    public function isSavedBy(User $user)
     {
-        return in_array($this->id, $user->saved_course);
+        return $this->bookmarks->contains('user_id', $user->id);
     }
 
     public function scopePublished($query)
@@ -67,5 +67,10 @@ class Course extends Model
     public function videos()
     {
         return $this->hasMany(Video::class);
+    }
+
+    public function bookmarks()
+    {
+        return $this->hasMany(Bookmark::class);
     }
 }
