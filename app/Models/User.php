@@ -27,20 +27,6 @@ class User extends \TCG\Voyager\Models\User
         'saved_course'
     ];
 
-    public function profile()
-    {
-        return $this->hasOne(UserProfile::class);
-    }
-
-    public function courses()
-    {
-        return $this->hasMany(Course::class);
-    }
-
-    public function videos()
-    {
-        return $this->hasManyThrough(Video::class, Course::class);
-    }
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -60,4 +46,19 @@ class User extends \TCG\Voyager\Models\User
         'saved_course' => 'array',
         'email_verified_at' => 'datetime',
     ];
+
+    public function profile()
+    {
+        return $this->hasOne(UserProfile::class);
+    }
+
+    public function courses()
+    {
+        return $this->hasMany(Course::class);
+    }
+
+    public function videos()
+    {
+        return $this->hasManyThrough(Video::class, Course::class);
+    }
 }

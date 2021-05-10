@@ -6,20 +6,20 @@
 
     </div>
     <br>
-    <h2>My Teaching Courses</h2>
+    <h2>My Saved Courses</h2>
     <hr>
     <div class="row justify-content-center">
       <div class="col-md-12 mb-4">
         @forelse ($courses as $course)
-          @include('teaching.course-card')
+          @include('course-saved.course-card')
         @empty
-          <h3>You don't have any courses, click to create a new one</h3>
-          <a href="{{ route('teaching.create') }}" class="btn btn-primary">New Course</a>
+          <h3>You don't have any courses, browse the courses</h3>
+          <a href="{{ route('course') }}" class="btn btn-primary">All Courses</a>
         @endforelse
       </div>
     </div>
     <div class="d-flex justify-content-center">
-      {!! $courses->links() !!}
+      {{-- {!! $courses->links() !!} --}}
     </div>
   </div>
 @endsection

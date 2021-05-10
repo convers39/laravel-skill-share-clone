@@ -6,7 +6,7 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\VideoController;
 use App\Http\Controllers\CourseTeachingController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\CourseSaveController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,17 +41,22 @@ Route::post('/accounts/{name}', [UserProfileController::class, 'update'])->name(
 Route::get('/browse/{category?}', [CourseController::class, 'index'])->name('course');
 Route::get('/courses/{course:slug}', [CourseController::class, 'show'])->name('course.show');
 
+// saved courses
+Route::middleware(['auth'])->group(function () {
+    Route::get('/saved-courses', [CourseSaveController::class, 'index'])->name('bookmark');
+    Route::get('/saved-courses/{course}', [CourseSaveController::class, 'save'])->name('bookmark.save');
+});
 // course create and edit
 Route::resource(
     'teaching',
     CourseTeachingController::class,
 )->except(['store', 'show'])->parameters(['teaching' => 'course'])->middleware(['auth']);
+Route::get('/teaching/{course}/preview', [CourseTeachingController::class, 'show'])->name('teaching.show');
 
 // equivalent to below
 // Route::get('/teaching', [CourseTeachingController::class, 'index'])->name('teaching');
 // Route::get('/teaching/create', [CourseTeachingController::class, 'create'])->name('teaching.create');
 // Route::post('/teaching', [CourseTeachingController::class, 'store'])->name('teaching.store');
-Route::get('/teaching/{course}/preview', [CourseTeachingController::class, 'show'])->name('teaching.show');
 // Route::get('/teaching/{course}/edit', [CourseTeachingController::class, 'edit'])->name('teaching.edit');
 // Route::put('/teaching/{course}', [CourseTeachingController::class, 'update'])->name('teaching.update');
 // Route::delete('/teaching/{course}', [CourseTeachingController::class, 'destroy'])->name('teaching.destroy');

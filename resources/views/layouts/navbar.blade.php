@@ -17,8 +17,8 @@
           <a class="nav-link dropdown-toggle" id="teaching-dropdown" href="#" role="button" data-toggle="dropdown"
             aria-haspopup="true" aria-expanded="false">Teaching</a>
           <div class="dropdown-menu" aria-labelledby="teaching-dropdown">
-            <a href="{{ route('teaching.create') }}" class="dropdown-item">New Course</a>
-            <a href="{{ route('teaching.index') }}" class="dropdown-item">All My Courses</a>
+            <a href="{{ route('teaching.create') }}" class="dropdown-item">{{ __('New Course') }}</a>
+            <a href="{{ route('teaching.index') }}" class="dropdown-item">{{ __('My Teaching Courses') }}</a>
           </div>
         </li>
       </ul>
@@ -42,6 +42,9 @@
             </li>
           @endif
         @else
+          <li class="nav-item">
+            <a class="nav-link" href="{{ route('bookmark') }}">{{ __('My Courses') }}</a>
+          </li>
           <li class="nav-item dropdown">
             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown"
               aria-haspopup="true" aria-expanded="false" v-pre>
@@ -53,8 +56,7 @@
                 My Account
               </a>
               <a class="dropdown-item" href="{{ route('logout') }}"
-                onclick="event.preventDefault();
-                                                                                                                                       document.getElementById('logout-form').submit();">
+                onclick="event.preventDefault();document.getElementById('logout-form').submit();">
                 {{ __('Logout') }}
               </a>
 

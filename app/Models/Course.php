@@ -39,6 +39,11 @@ class Course extends Model
     //     return 'slug';
     // }
 
+    public function isSavedByUser(User $user)
+    {
+        return in_array($this->id, $user->saved_course);
+    }
+
     public function scopePublished($query)
     {
         return $query->where('published', true);
