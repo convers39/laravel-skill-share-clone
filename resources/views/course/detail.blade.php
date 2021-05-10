@@ -141,8 +141,8 @@
                 <div class="card-text text-truncate text-line-clamp-md">{!! $related->desc !!}</div>
               </div>
               <div class="card-footer">
-                <a href="{{ route('course.show', ['course' => $related, 'slug' => $related->slug]) }}"
-                  class="btn btn-primary btn-sm">More Info</a>
+                <a href="{{ route('course.show', ['course' => $related]) }}" class="btn btn-primary btn-sm">More
+                  Info</a>
               </div>
             </div>
           </div>

@@ -38,8 +38,8 @@ Route::get('/accounts/{name}', [UserProfileController::class, 'show'])->name('ac
 Route::post('/accounts/{name}', [UserProfileController::class, 'update'])->name('account.update');
 
 // course list and detail
-Route::get('/courses', [CourseController::class, 'index'])->name('course');
-Route::get('/courses/{course}/{slug}', [CourseController::class, 'show'])->name('course.show');
+Route::get('/browse/{category?}', [CourseController::class, 'index'])->name('course');
+Route::get('/courses/{course:slug}', [CourseController::class, 'show'])->name('course.show');
 
 // course create and edit
 Route::resource(

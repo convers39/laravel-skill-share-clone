@@ -15,6 +15,19 @@ class CourseObserver
     public $afterCommit = true;
 
     /**
+     * Handle the course "saving" event.
+     *
+     * @param  \App\Models\Course  $course
+     * @return void
+     */
+    public function saving(Course $course)
+    {
+        if ($course->isDirty('title')) {
+            $course->slug = Str::slug($course->title);
+        }
+    }
+
+    /**
      * Handle the Course "created" event.
      *
      * @param  \App\Models\Course  $course
@@ -22,9 +35,7 @@ class CourseObserver
      */
     public function created(Course $course)
     {
-        if (is_null($course->slug)) {
-            $course->slug = Str::slug($course->title);
-        }
+        //
     }
 
     /**
@@ -35,9 +46,7 @@ class CourseObserver
      */
     public function updated(Course $course)
     {
-        if ($course->wasChanged('title')) {
-            $course->slug = Str::slug($course->title);
-        }
+        //   
     }
 
     /**

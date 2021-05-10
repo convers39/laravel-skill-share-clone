@@ -1,7 +1,7 @@
 <div class="col col-md-3">
   <br>
   <div class="list-group-item  list-group-item-action border-light">
-    <a href="#" class="stretched-link text-decoration-none">
+    <a href="{{ route('course') }}" class="stretched-link text-decoration-none">
       <strong class="text-primary">All Courses</strong>
     </a>
   </div>
@@ -16,7 +16,7 @@
       @foreach ($categories as $category)
         <li
           class="list-group-item list-group-item-{{ $category->children->count() ? 'dark' : 'light' }} list-group-item-action">
-          <a href="#" class="stretched-link text-decoration-none">
+          <a href="{{ route('course', ['category' => $category]) }}" class="stretched-link text-decoration-none">
             {{ $category->name }}
           </a>
         </li>

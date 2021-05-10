@@ -11,7 +11,7 @@
           <a class="nav-link" href="{{ url('/') }}">Home <span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item  {{ Route::is('course') ? 'active' : '' }}">
-          <a class="nav-link" href="{{ url('/courses') }}">Courses</a>
+          <a class="nav-link" href="{{ route('course') }}">Courses</a>
         </li>
         <li class="nav-item {{ Route::is('teaching*') ? 'active' : '' }} dropdown">
           <a class="nav-link dropdown-toggle" id="teaching-dropdown" href="#" role="button" data-toggle="dropdown"
@@ -54,7 +54,7 @@
               </a>
               <a class="dropdown-item" href="{{ route('logout') }}"
                 onclick="event.preventDefault();
-                                                                                                                                     document.getElementById('logout-form').submit();">
+                                                                                                                                       document.getElementById('logout-form').submit();">
                 {{ __('Logout') }}
               </a>
 

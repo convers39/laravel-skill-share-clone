@@ -16,6 +16,11 @@ class Category extends Model
         return $this->hasMany(Course::class);
     }
 
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
     public function parent()
     {
         return $this->belongsTo(self::class)->with('parent');

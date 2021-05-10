@@ -7,7 +7,7 @@
     <div class="card-body">
       <h5 class="card-title">{{ $course->title }}</h5>
       <div class="card-text text-truncate text-line-clamp-md mb-3">{!! $course->desc !!} </div>
-      <a href="{{ route('course.show', ['course' => $course, 'slug' => $course->slug]) }}" class="btn btn-primary">
+      <a href="{{ route('course.show', ['course' => $course]) }}" class="btn btn-primary">
         View Detail</a>
     </div>
   </div>

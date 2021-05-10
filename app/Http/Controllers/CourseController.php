@@ -2,14 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\Course;
 
 class CourseController extends Controller
 {
-    public function index()
+    public function index($category = null)
     {
-        $courses = Course::latest('updated_at')->published()->with(['user'])->paginate(6);
+        $courses = Course::latest('updated_at')->published()->with(['user']);
+        if ($category) {
+            $cate = Category::where('slug', $category)->firstOrFail();
+            $courses = $courses->where('category_id', $cate->id);
+        }
+        $courses = $courses->paginate(6);
         return view('course.list', compact('courses'));
     }
 
@@ -17,6 +23,10 @@ class CourseController extends Controller
     {
         $track = $request->input('track');
         $course = Course::findOrFail($course->id);
+        if (!$course->published) {
+            return back()->with('error', 'This course is not published');
+        }
+
         $videos = $course->videos()->orderBy('track')->get();
         $currentVideo =  $videos->where('track', $track)->first() ?? $videos->first();
         // TODO: More detailed logic on related course, based on teacher, category, tags

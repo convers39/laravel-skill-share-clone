@@ -1,5 +1,5 @@
 <li class="list-group-item list-group-item-light list-group-item-action">
-  <a href="#" class="stretched-link text-decoration-none">
+  <a href="{{ route('course', ['category' => $child]) }}" class="stretched-link text-decoration-none">
     {{ $child->name }}
   </a>
 </li>

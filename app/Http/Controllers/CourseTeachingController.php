@@ -65,7 +65,7 @@ class CourseTeachingController extends Controller
     public function show(Request $request, Course $course)
     {
         if ($course->published) {
-            return redirect()->route('course.show', ['course' => $course, 'slug' => $course->slug]);
+            return redirect()->route('course.show', ['course' => $course]);
         }
 
         $videos = $course->videos()->orderBy('track')->get();
@@ -107,7 +107,7 @@ class CourseTeachingController extends Controller
 
         if ($course->published) {
             return redirect()
-                ->route('course.show', ['course' => $course, 'slug' => $course->slug])
+                ->route('course.show', ['course' => $course])
                 ->with('success', 'Course published successfully');
         }
 

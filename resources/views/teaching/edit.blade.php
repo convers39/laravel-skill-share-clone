@@ -42,7 +42,7 @@
           </small>
         @else
           <small>This course is <span class="badge badge-pill badge-success">Published</span>: <a
-              href="{{ route('course.show', ['course' => $course, 'slug' => $course->slug]) }}">Check</a></small>
+              href="{{ route('course.show', ['course' => $course]) }}">Check</a></small>
         @endif
       </div>
       <div class="px-1">
