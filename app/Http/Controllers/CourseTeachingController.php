@@ -45,17 +45,6 @@ class CourseTeachingController extends Controller
     }
 
     /**
-     * Will not be used.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
      * Display the preview of an unpublished course, 
      * or redirect to the published course page.
      *
@@ -69,7 +58,7 @@ class CourseTeachingController extends Controller
         }
 
         $videos = $course->videos()->orderBy('track')->get();
-        $track = $request->input('track');
+        $track = $request('track');
         $currentVideo =  $videos->where('track', $track)->first() ?? $videos->first();
         return view('teaching.preview', compact('course', 'videos', 'currentVideo'));
     }

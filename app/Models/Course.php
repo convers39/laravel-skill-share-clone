@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\Video;
 use App\Models\Category;
+use App\Models\Comment;
 
 
 class Course extends Model
@@ -22,6 +23,7 @@ class Course extends Model
     // }
 
     use HasFactory;
+
     protected $fillable = [
         'title',
         'slug',
@@ -33,6 +35,13 @@ class Course extends Model
         'video_count',
         'save_count',
     ];
+
+    /**
+     * The relationships that should always be loaded.
+     *
+     * @var array
+     */
+    protected $with = ['user', 'category'];
 
     // public function getRouteKeyName()
     // {
@@ -72,5 +81,10 @@ class Course extends Model
     public function bookmarks()
     {
         return $this->hasMany(Bookmark::class);
+    }
+
+    public function comments()
+    {
+        return $this->morphMany(Comment::class, 'commentable')->whereNull('parent_id');
     }
 }

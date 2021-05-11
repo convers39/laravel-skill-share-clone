@@ -10,6 +10,7 @@ class CourseController extends Controller
 {
     public function index($category = null)
     {
+        // TODO: fix recursive descendants
         $courses = Course::latest('updated_at')->published()->with(['user']);
         if ($category) {
             $cate = Category::where('slug', $category)->firstOrFail();
@@ -29,6 +30,9 @@ class CourseController extends Controller
 
         $videos = $course->videos()->orderBy('track')->get();
         $currentVideo =  $videos->where('track', $track)->first() ?? $videos->first();
+
+        // $comments = $course->comments();
+
         // TODO: More detailed logic on related course, based on teacher, category, tags
         $relatedCourses = Course::where('user_id', $course->user_id)->limit(3)->get();
         return view(

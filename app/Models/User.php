@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use App\Models\UserProfile;
 use App\Models\Course;
 use App\Models\Video;
+use App\Models\Comment;
 
 class User extends \TCG\Voyager\Models\User
 {
@@ -60,10 +61,19 @@ class User extends \TCG\Voyager\Models\User
     public function bookmarks()
     {
         return $this->hasMany(Bookmark::class);
+        // return $this->belongsToMany(Course::class, 'bookmarks')->withTimestamps();
     }
 
     public function videos()
     {
         return $this->hasManyThrough(Video::class, Course::class);
+    }
+
+    /**
+     * Get all of the user's comments.
+     */
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
     }
 }

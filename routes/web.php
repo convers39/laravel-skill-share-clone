@@ -8,6 +8,7 @@ use App\Http\Controllers\VideoController;
 use App\Http\Controllers\CourseTeachingController;
 use App\Http\Controllers\CourseSaveController;
 use App\Http\Controllers\BookmarkController;
+use App\Http\Controllers\CommentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,6 +44,9 @@ Route::get('/browse/{category?}', [CourseController::class, 'index'])->name('cou
 Route::get('/courses/{course:slug}', [CourseController::class, 'show'])->name('course.show');
 
 Route::post('/courses/{course}/bookmark', [BookmarkController::class, 'toggle'])->name('bookmark.toggle')->middleware(['auth']);
+
+// comments
+Route::post('/courses/{course}/comment', [CommentController::class, 'store'])->name('comment.store');
 
 // saved courses
 Route::middleware(['auth'])->group(function () {

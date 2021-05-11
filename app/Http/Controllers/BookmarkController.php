@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-
 use Illuminate\Http\Request;
 use App\Models\Course;
 
@@ -22,6 +20,5 @@ class BookmarkController extends Controller
         }
 
         return back()->with('success', $message);
-        // return response()->json(['msg' => 'Course saved successfully']);
     }
 }

@@ -14,6 +14,7 @@ class Category extends Model
     public function courses()
     {
         return $this->hasMany(Course::class);
+        // return $this->belongsToMany(User::class, 'bookmarks')->withTimestamps();
     }
 
     public function getRouteKeyName()
