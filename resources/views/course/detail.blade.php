@@ -92,5 +92,21 @@
 @endsection
 
 @section('scripts')
+  <script type="text/javascript">
+    // $(function() {
+    //   let commentContainer = document.querySelector('.comment-container')
+    //   commentContainer.addEventListener('click', function(e) {
+    //     if (e.target.classList.contains('edit-reply')) {
+    //       e.preventDefault()
+    //       console.log(e.target.id)
+    //       let id = e.target.id.split('-')[1]
+    //       let commentContent = document.querySelector(`comment-content-${id}`)
+    //       let commentBody = document.getElementById(`comment-body-${id}`)
+    //       let paragraph = commentBody.firstChild
+    //       paragraph.contentEditable = true
+    //     }
+    //   })
+    // })
 
+  </script>
 @endsection

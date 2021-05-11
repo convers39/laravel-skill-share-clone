@@ -46,7 +46,8 @@ Route::get('/courses/{course:slug}', [CourseController::class, 'show'])->name('c
 Route::post('/courses/{course}/bookmark', [BookmarkController::class, 'toggle'])->name('bookmark.toggle')->middleware(['auth']);
 
 // comments
-Route::post('/courses/{course}/comment', [CommentController::class, 'store'])->name('comment.store');
+Route::post('/courses/{course}/comments', [CommentController::class, 'store'])->name('comment.store');
+Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comment.destroy');
 
 // saved courses
 Route::middleware(['auth'])->group(function () {

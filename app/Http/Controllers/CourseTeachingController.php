@@ -58,7 +58,7 @@ class CourseTeachingController extends Controller
         }
 
         $videos = $course->videos()->orderBy('track')->get();
-        $track = $request('track');
+        $track = $request->input('track');
         $currentVideo =  $videos->where('track', $track)->first() ?? $videos->first();
         return view('teaching.preview', compact('course', 'videos', 'currentVideo'));
     }

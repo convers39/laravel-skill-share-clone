@@ -68,7 +68,12 @@ class CommentController extends Controller
      */
     public function destroy(Comment $comment)
     {
-        Comment::findOrFail($comment)->delete();
+        // dd($comment->replies->count());
+        if ($comment->replies->count()) {
+            $comment->update(['content' => 'This comment has been deleted']);
+        } else {
+            $comment->delete();
+        }
         return back();
     }
 }
